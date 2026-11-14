@@ -52,6 +52,9 @@ services:
       # 每 3 个实例重复投送一次，验证接收端去重
       MOVE_DUPLICATE_EVERY: "3"
       STUDY_COUNTS: "8,6,5"
+      # 几何检查演示用缺陷检查：all=生成缺层/重层/层距异常/方向不一致/
+      # 标签缺失/单片 共 6 个虚构 CT 检查；置空可关闭
+      DEFECT_STUDIES: "all"
     ports:
       - "11112:11112"
     volumes:

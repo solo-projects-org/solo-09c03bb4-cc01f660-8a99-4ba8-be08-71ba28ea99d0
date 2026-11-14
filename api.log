@@ -1,0 +1,676 @@
+INFO:     Started server process [5567]
+INFO:     Waiting for application startup.
+2026-11-14 11:18:09,085 INFO    dicom | C-STORE SCP 已启动：AE=RETRIEVER 监听 127.0.0.1:11123
+2026-11-14 11:18:09,085 INFO    api | API 就绪，数据卷=/tmp/smoke2/api
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8010 (Press CTRL+C to quit)
+INFO:     127.0.0.1:45660 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38578 - "POST /batches HTTP/1.1" 201 Created
+INFO:     127.0.0.1:38590 - "GET /batches/3a2a3eff2d674a62aa4d5ccafca9a4cf HTTP/1.1" 200 OK
+2026-11-14 11:18:33,534 INFO    pynetdicom.association | Requesting Association
+2026-11-14 11:18:33,542 INFO    pynetdicom.acse | Association Accepted
+2026-11-14 11:18:33,543 WARNING pydicom | A value of type 'str' cannot be assigned to a tag with VR US.
+/tmp/venv/lib/python3.11/site-packages/pydicom/valuerep.py:440: UserWarning: A value of type 'str' cannot be assigned to a tag with VR US.
+  warn_and_log(msg)
+2026-11-14 11:18:33,547 WARNING pydicom | A value of type 'str' cannot be assigned to a tag with VR US.
+2026-11-14 11:18:33,548 INFO    pynetdicom.association | Sending Find Request: MsgID 1
+2026-11-14 11:18:33,548 INFO    pynetdicom.association | 
+2026-11-14 11:18:33,549 INFO    pynetdicom.association | # Request Identifier
+2026-11-14 11:18:33,549 INFO    pynetdicom.association | (0002,0010) UI (no value available)                     # 0 TransferSyntaxUID
+2026-11-14 11:18:33,549 INFO    pynetdicom.association | (0008,0016) UI (no value available)                     # 0 SOPClassUID
+2026-11-14 11:18:33,549 INFO    pynetdicom.association | (0008,0018) UI (no value available)                     # 0 SOPInstanceUID
+2026-11-14 11:18:33,549 INFO    pynetdicom.association | (0008,0052) CS [IMAGE]                                  # 1 QueryRetrieveLevel
+2026-11-14 11:18:33,550 INFO    pynetdicom.association | (0008,0060) CS (no value available)                     # 0 Modality
+2026-11-14 11:18:33,550 INFO    pynetdicom.association | (0020,000D) UI [1.2.826.0.1.3680043.8.498.1001]         # 1 StudyInstanceUID
+2026-11-14 11:18:33,550 INFO    pynetdicom.association | (0028,0010) US (no value available)                     # 0 Rows
+2026-11-14 11:18:33,551 INFO    pynetdicom.association | (0028,0011) US (no value available)                     # 0 Columns
+2026-11-14 11:18:33,551 INFO    pynetdicom.association | 
+2026-11-14 11:18:33,647 INFO    pynetdicom.association | Find SCP Response: 1 - 0xFF00 (Pending)
+2026-11-14 11:18:33,647 INFO    pynetdicom.association | 
+2026-11-14 11:18:33,647 INFO    pynetdicom.association | # Response Identifier
+2026-11-14 11:18:33,648 INFO    pynetdicom.association | (0002,0010) UI [1.2.840.10008.1.2.1]                    # 1 TransferSyntaxUID
+2026-11-14 11:18:33,648 INFO    pynetdicom.association | (0008,0016) UI [1.2.840.10008.5.1.4.1.1.2]              # 1 SOPClassUID
+2026-11-14 11:18:33,648 INFO    pynetdicom.association | (0008,0018) UI [1.2.826.0.1.3680043.8.498.3101]         # 1 SOPInstanceUID
+2026-11-14 11:18:33,648 INFO    pynetdicom.association | (0008,0052) CS [IMAGE]                                  # 1 QueryRetrieveLevel
+2026-11-14 11:18:33,648 INFO    pynetdicom.association | (0008,0054) AE [MYPACS]                                 # 1 RetrieveAETitle
+2026-11-14 11:18:33,648 INFO    pynetdicom.association | (0008,0060) CS [CT]                                     # 1 Modality
+2026-11-14 11:18:33,648 INFO    pynetdicom.association | (0020,000D) UI [1.2.826.0.1.3680043.8.498.1001]         # 1 StudyInstanceUID
+2026-11-14 11:18:33,648 INFO    pynetdicom.association | (0020,000E) UI [1.2.826.0.1.3680043.8.498.2001]         # 1 SeriesInstanceUID
+2026-11-14 11:18:33,648 INFO    pynetdicom.association | (0028,0010) US [64]                                     # 1 Rows
+2026-11-14 11:18:33,648 INFO    pynetdicom.association | (0028,0011) US [64]                                     # 1 Columns
+2026-11-14 11:18:33,648 INFO    pynetdicom.association | 
+2026-11-14 11:18:33,649 INFO    pynetdicom.association | Find SCP Response: 2 - 0xFF00 (Pending)
+2026-11-14 11:18:33,649 INFO    pynetdicom.association | 
+2026-11-14 11:18:33,649 INFO    pynetdicom.association | # Response Identifier
+2026-11-14 11:18:33,650 INFO    pynetdicom.association | (0002,0010) UI [1.2.840.10008.1.2.1]                    # 1 TransferSyntaxUID
+2026-11-14 11:18:33,650 INFO    pynetdicom.association | (0008,0016) UI [1.2.840.10008.5.1.4.1.1.2]              # 1 SOPClassUID
+2026-11-14 11:18:33,650 INFO    pynetdicom.association | (0008,0018) UI [1.2.826.0.1.3680043.8.498.3102]         # 1 SOPInstanceUID
+2026-11-14 11:18:33,650 INFO    pynetdicom.association | (0008,0052) CS [IMAGE]                                  # 1 QueryRetrieveLevel
+2026-11-14 11:18:33,650 INFO    pynetdicom.association | (0008,0054) AE [MYPACS]                                 # 1 RetrieveAETitle
+2026-11-14 11:18:33,650 INFO    pynetdicom.association | (0008,0060) CS [CT]                                     # 1 Modality
+2026-11-14 11:18:33,650 INFO    pynetdicom.association | (0020,000D) UI [1.2.826.0.1.3680043.8.498.1001]         # 1 StudyInstanceUID
+2026-11-14 11:18:33,650 INFO    pynetdicom.association | (0020,000E) UI [1.2.826.0.1.3680043.8.498.2001]         # 1 SeriesInstanceUID
+2026-11-14 11:18:33,650 INFO    pynetdicom.association | (0028,0010) US [64]                                     # 1 Rows
+2026-11-14 11:18:33,651 INFO    pynetdicom.association | (0028,0011) US [64]                                     # 1 Columns
+2026-11-14 11:18:33,651 INFO    pynetdicom.association | 
+2026-11-14 11:18:33,652 INFO    pynetdicom.association | Find SCP Response: 3 - 0xFF00 (Pending)
+2026-11-14 11:18:33,652 INFO    pynetdicom.association | 
+2026-11-14 11:18:33,652 INFO    pynetdicom.association | # Response Identifier
+2026-11-14 11:18:33,652 INFO    pynetdicom.association | (0002,0010) UI [1.2.840.10008.1.2.1]                    # 1 TransferSyntaxUID
+2026-11-14 11:18:33,652 INFO    pynetdicom.association | (0008,0016) UI [1.2.840.10008.5.1.4.1.1.2]              # 1 SOPClassUID
+2026-11-14 11:18:33,653 INFO    pynetdicom.association | (0008,0018) UI [1.2.826.0.1.3680043.8.498.3103]         # 1 SOPInstanceUID
+2026-11-14 11:18:33,653 INFO    pynetdicom.association | (0008,0052) CS [IMAGE]                                  # 1 QueryRetrieveLevel
+2026-11-14 11:18:33,653 INFO    pynetdicom.association | (0008,0054) AE [MYPACS]                                 # 1 RetrieveAETitle
+2026-11-14 11:18:33,653 INFO    pynetdicom.association | (0008,0060) CS [CT]                                     # 1 Modality
+2026-11-14 11:18:33,653 INFO    pynetdicom.association | (0020,000D) UI [1.2.826.0.1.3680043.8.498.1001]         # 1 StudyInstanceUID
+2026-11-14 11:18:33,653 INFO    pynetdicom.association | (0020,000E) UI [1.2.826.0.1.3680043.8.498.2001]         # 1 SeriesInstanceUID
+2026-11-14 11:18:33,653 INFO    pynetdicom.association | (0028,0010) US [64]                                     # 1 Rows
+2026-11-14 11:18:33,653 INFO    pynetdicom.association | (0028,0011) US [64]                                     # 1 Columns
+2026-11-14 11:18:33,653 INFO    pynetdicom.association | 
+2026-11-14 11:18:33,654 INFO    pynetdicom.association | Find SCP Response: 4 - 0xFF00 (Pending)
+2026-11-14 11:18:33,654 INFO    pynetdicom.association | 
+2026-11-14 11:18:33,654 INFO    pynetdicom.association | # Response Identifier
+2026-11-14 11:18:33,655 INFO    pynetdicom.association | (0002,0010) UI [1.2.840.10008.1.2.1]                    # 1 TransferSyntaxUID
+2026-11-14 11:18:33,655 INFO    pynetdicom.association | (0008,0016) UI [1.2.840.10008.5.1.4.1.1.2]              # 1 SOPClassUID
+2026-11-14 11:18:33,655 INFO    pynetdicom.association | (0008,0018) UI [1.2.826.0.1.3680043.8.498.3104]         # 1 SOPInstanceUID
+2026-11-14 11:18:33,655 INFO    pynetdicom.association | (0008,0052) CS [IMAGE]                                  # 1 QueryRetrieveLevel
+2026-11-14 11:18:33,655 INFO    pynetdicom.association | (0008,0054) AE [MYPACS]                                 # 1 RetrieveAETitle
+2026-11-14 11:18:33,655 INFO    pynetdicom.association | (0008,0060) CS [CT]                                     # 1 Modality
+2026-11-14 11:18:33,655 INFO    pynetdicom.association | (0020,000D) UI [1.2.826.0.1.3680043.8.498.1001]         # 1 StudyInstanceUID
+2026-11-14 11:18:33,655 INFO    pynetdicom.association | (0020,000E) UI [1.2.826.0.1.3680043.8.498.2001]         # 1 SeriesInstanceUID
+2026-11-14 11:18:33,655 INFO    pynetdicom.association | (0028,0010) US [64]                                     # 1 Rows
+2026-11-14 11:18:33,655 INFO    pynetdicom.association | (0028,0011) US [64]                                     # 1 Columns
+2026-11-14 11:18:33,655 INFO    pynetdicom.association | 
+2026-11-14 11:18:33,656 INFO    pynetdicom.association | Find SCP Response: 5 - 0xFF00 (Pending)
+2026-11-14 11:18:33,656 INFO    pynetdicom.association | 
+2026-11-14 11:18:33,656 INFO    pynetdicom.association | # Response Identifier
+2026-11-14 11:18:33,657 INFO    pynetdicom.association | (0002,0010) UI [1.2.840.10008.1.2.1]                    # 1 TransferSyntaxUID
+2026-11-14 11:18:33,657 INFO    pynetdicom.association | (0008,0016) UI [1.2.840.10008.5.1.4.1.1.2]              # 1 SOPClassUID
+2026-11-14 11:18:33,657 INFO    pynetdicom.association | (0008,0018) UI [1.2.826.0.1.3680043.8.498.3105]         # 1 SOPInstanceUID
+2026-11-14 11:18:33,657 INFO    pynetdicom.association | (0008,0052) CS [IMAGE]                                  # 1 QueryRetrieveLevel
+2026-11-14 11:18:33,657 INFO    pynetdicom.association | (0008,0054) AE [MYPACS]                                 # 1 RetrieveAETitle
+2026-11-14 11:18:33,657 INFO    pynetdicom.association | (0008,0060) CS [CT]                                     # 1 Modality
+2026-11-14 11:18:33,657 INFO    pynetdicom.association | (0020,000D) UI [1.2.826.0.1.3680043.8.498.1001]         # 1 StudyInstanceUID
+2026-11-14 11:18:33,657 INFO    pynetdicom.association | (0020,000E) UI [1.2.826.0.1.3680043.8.498.2001]         # 1 SeriesInstanceUID
+2026-11-14 11:18:33,657 INFO    pynetdicom.association | (0028,0010) US [64]                                     # 1 Rows
+2026-11-14 11:18:33,657 INFO    pynetdicom.association | (0028,0011) US [64]                                     # 1 Columns
+2026-11-14 11:18:33,657 INFO    pynetdicom.association | 
+2026-11-14 11:18:33,658 INFO    pynetdicom.association | Find SCP Response: 6 - 0xFF00 (Pending)
+2026-11-14 11:18:33,659 INFO    pynetdicom.association | 
+2026-11-14 11:18:33,659 INFO    pynetdicom.association | # Response Identifier
+2026-11-14 11:18:33,659 INFO    pynetdicom.association | (0002,0010) UI [1.2.840.10008.1.2.1]                    # 1 TransferSyntaxUID
+2026-11-14 11:18:33,659 INFO    pynetdicom.association | (0008,0016) UI [1.2.840.10008.5.1.4.1.1.2]              # 1 SOPClassUID
+2026-11-14 11:18:33,659 INFO    pynetdicom.association | (0008,0018) UI [1.2.826.0.1.3680043.8.498.3106]         # 1 SOPInstanceUID
+2026-11-14 11:18:33,659 INFO    pynetdicom.association | (0008,0052) CS [IMAGE]                                  # 1 QueryRetrieveLevel
+2026-11-14 11:18:33,659 INFO    pynetdicom.association | (0008,0054) AE [MYPACS]                                 # 1 RetrieveAETitle
+2026-11-14 11:18:33,660 INFO    pynetdicom.association | (0008,0060) CS [CT]                                     # 1 Modality
+2026-11-14 11:18:33,660 INFO    pynetdicom.association | (0020,000D) UI [1.2.826.0.1.3680043.8.498.1001]         # 1 StudyInstanceUID
+2026-11-14 11:18:33,660 INFO    pynetdicom.association | (0020,000E) UI [1.2.826.0.1.3680043.8.498.2001]         # 1 SeriesInstanceUID
+2026-11-14 11:18:33,660 INFO    pynetdicom.association | (0028,0010) US [64]                                     # 1 Rows
+2026-11-14 11:18:33,660 INFO    pynetdicom.association | (0028,0011) US [64]                                     # 1 Columns
+2026-11-14 11:18:33,660 INFO    pynetdicom.association | 
+2026-11-14 11:18:33,660 INFO    pynetdicom.association | Find SCP Result: 0x0000 (Success)
+2026-11-14 11:18:33,660 INFO    pynetdicom.association | Releasing Association
+2026-11-14 11:18:33,674 INFO    pipeline | 批 3a2a3eff2d674a62aa4d5ccafca9a4cf 清单固定 6 个 SOP
+2026-11-14 11:18:33,681 INFO    pynetdicom.association | Requesting Association
+2026-11-14 11:18:33,692 INFO    pynetdicom.acse | Association Accepted
+2026-11-14 11:18:33,694 INFO    pynetdicom.association | Sending Move Request: MsgID 1
+2026-11-14 11:18:33,695 INFO    pynetdicom.association | 
+2026-11-14 11:18:33,695 INFO    pynetdicom.association | # Request Identifier
+2026-11-14 11:18:33,695 INFO    pynetdicom.association | (0008,0052) CS [STUDY]                                  # 1 QueryRetrieveLevel
+2026-11-14 11:18:33,695 INFO    pynetdicom.association | (0020,000D) UI [1.2.826.0.1.3680043.8.498.1001]         # 1 StudyInstanceUID
+2026-11-14 11:18:33,695 INFO    pynetdicom.association | 
+2026-11-14 11:18:33,747 INFO    pynetdicom.acse | Accepting Association
+2026-11-14 11:18:33,822 INFO    pynetdicom._handlers | Received Store Request
+2026-11-14 11:18:33,838 INFO    dicom | 批 3a2a3eff2d674a62aa4d5ccafca9a4cf 接收实例 1.2.826.0.1.3680043.8.498.3101（1/6）
+2026-11-14 11:18:33,848 INFO    pynetdicom.association | Move SCP Response: 1 - 0xFF00 (Pending)
+2026-11-14 11:18:33,848 INFO    pynetdicom.association | Sub-Operations Remaining: 5, Completed: 1, Failed: 0, Warning: 0
+2026-11-14 11:18:33,914 INFO    pynetdicom._handlers | Received Store Request
+2026-11-14 11:18:33,924 INFO    dicom | 批 3a2a3eff2d674a62aa4d5ccafca9a4cf 接收实例 1.2.826.0.1.3680043.8.498.3102（2/6）
+2026-11-14 11:18:33,939 INFO    pynetdicom.association | Move SCP Response: 2 - 0xFF00 (Pending)
+INFO:     127.0.0.1:38598 - "GET /batches/3a2a3eff2d674a62aa4d5ccafca9a4cf HTTP/1.1" 200 OK
+2026-11-14 11:18:33,939 INFO    pynetdicom.association | Sub-Operations Remaining: 4, Completed: 2, Failed: 0, Warning: 0
+2026-11-14 11:18:34,009 INFO    pynetdicom._handlers | Received Store Request
+2026-11-14 11:18:34,027 INFO    dicom | 批 3a2a3eff2d674a62aa4d5ccafca9a4cf 接收实例 1.2.826.0.1.3680043.8.498.3103（3/6）
+2026-11-14 11:18:34,037 INFO    pynetdicom.association | Move SCP Response: 3 - 0xFF00 (Pending)
+2026-11-14 11:18:34,037 INFO    pynetdicom.association | Sub-Operations Remaining: 3, Completed: 3, Failed: 0, Warning: 0
+2026-11-14 11:18:34,103 INFO    pynetdicom._handlers | Received Store Request
+2026-11-14 11:18:34,116 INFO    dicom | 批 3a2a3eff2d674a62aa4d5ccafca9a4cf 接收实例 1.2.826.0.1.3680043.8.498.3104（4/6）
+2026-11-14 11:18:34,123 INFO    pynetdicom.association | Move SCP Response: 4 - 0xFF00 (Pending)
+2026-11-14 11:18:34,123 INFO    pynetdicom.association | Sub-Operations Remaining: 2, Completed: 4, Failed: 0, Warning: 0
+2026-11-14 11:18:34,188 INFO    pynetdicom._handlers | Received Store Request
+2026-11-14 11:18:34,197 INFO    dicom | 批 3a2a3eff2d674a62aa4d5ccafca9a4cf 接收实例 1.2.826.0.1.3680043.8.498.3105（5/6）
+2026-11-14 11:18:34,204 INFO    pynetdicom.association | Move SCP Response: 5 - 0xFF00 (Pending)
+2026-11-14 11:18:34,204 INFO    pynetdicom.association | Sub-Operations Remaining: 1, Completed: 5, Failed: 0, Warning: 0
+2026-11-14 11:18:34,272 INFO    pynetdicom._handlers | Received Store Request
+2026-11-14 11:18:34,286 INFO    dicom | 批 3a2a3eff2d674a62aa4d5ccafca9a4cf 接收实例 1.2.826.0.1.3680043.8.498.3106（6/6）
+2026-11-14 11:18:34,293 INFO    pynetdicom.association | Move SCP Response: 6 - 0xFF00 (Pending)
+2026-11-14 11:18:34,293 INFO    pynetdicom.association | Sub-Operations Remaining: 0, Completed: 6, Failed: 0, Warning: 0
+2026-11-14 11:18:34,294 INFO    pynetdicom.association | Association Released
+2026-11-14 11:18:34,311 INFO    pynetdicom.association | Move SCP Result: 0x0000 (Success)
+2026-11-14 11:18:34,311 INFO    pynetdicom.association | Sub-Operations Remaining: 0, Completed: 6, Failed: 0, Warning: 0
+2026-11-14 11:18:34,312 INFO    pynetdicom.association | Releasing Association
+2026-11-14 11:18:34,333 INFO    pipeline | 批 3a2a3eff2d674a62aa4d5ccafca9a4cf 完成，ZIP=/tmp/smoke2/api/zips/3a2a3eff2d674a62aa4d5ccafca9a4cf.zip
+INFO:     127.0.0.1:38612 - "GET /batches/3a2a3eff2d674a62aa4d5ccafca9a4cf HTTP/1.1" 200 OK
+2026-11-14 11:18:34,361 INFO    geometry | 几何检查完成：zip=/tmp/smoke2/api/zips/3a2a3eff2d674a62aa4d5ccafca9a4cf.zip 序列数=1 状态=['VALID']
+INFO:     127.0.0.1:38614 - "POST /batches/3a2a3eff2d674a62aa4d5ccafca9a4cf/geometry-check?expected_spacing_mm=2.0&tolerance_mm=0.5 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38628 - "POST /batches HTTP/1.1" 201 Created
+INFO:     127.0.0.1:38634 - "GET /batches/314421b9014a48f5a03ee7814ef10887 HTTP/1.1" 200 OK
+2026-11-14 11:18:34,378 INFO    pynetdicom.association | Requesting Association
+2026-11-14 11:18:34,385 INFO    pynetdicom.acse | Association Accepted
+2026-11-14 11:18:34,387 WARNING pydicom | A value of type 'str' cannot be assigned to a tag with VR US.
+2026-11-14 11:18:34,387 WARNING pydicom | A value of type 'str' cannot be assigned to a tag with VR US.
+2026-11-14 11:18:34,390 INFO    pynetdicom.association | Sending Find Request: MsgID 1
+2026-11-14 11:18:34,390 INFO    pynetdicom.association | 
+2026-11-14 11:18:34,391 INFO    pynetdicom.association | # Request Identifier
+2026-11-14 11:18:34,391 INFO    pynetdicom.association | (0002,0010) UI (no value available)                     # 0 TransferSyntaxUID
+2026-11-14 11:18:34,392 INFO    pynetdicom.association | (0008,0016) UI (no value available)                     # 0 SOPClassUID
+2026-11-14 11:18:34,392 INFO    pynetdicom.association | (0008,0018) UI (no value available)                     # 0 SOPInstanceUID
+2026-11-14 11:18:34,392 INFO    pynetdicom.association | (0008,0052) CS [IMAGE]                                  # 1 QueryRetrieveLevel
+2026-11-14 11:18:34,393 INFO    pynetdicom.association | (0008,0060) CS (no value available)                     # 0 Modality
+2026-11-14 11:18:34,393 INFO    pynetdicom.association | (0020,000D) UI [1.2.826.0.1.3680043.8.498.8101]         # 1 StudyInstanceUID
+2026-11-14 11:18:34,393 INFO    pynetdicom.association | (0028,0010) US (no value available)                     # 0 Rows
+2026-11-14 11:18:34,394 INFO    pynetdicom.association | (0028,0011) US (no value available)                     # 0 Columns
+2026-11-14 11:18:34,394 INFO    pynetdicom.association | 
+2026-11-14 11:18:34,490 INFO    pynetdicom.association | Find SCP Response: 1 - 0xFF00 (Pending)
+2026-11-14 11:18:34,490 INFO    pynetdicom.association | 
+2026-11-14 11:18:34,490 INFO    pynetdicom.association | # Response Identifier
+2026-11-14 11:18:34,491 INFO    pynetdicom.association | (0002,0010) UI [1.2.840.10008.1.2.1]                    # 1 TransferSyntaxUID
+2026-11-14 11:18:34,491 INFO    pynetdicom.association | (0008,0016) UI [1.2.840.10008.5.1.4.1.1.2]              # 1 SOPClassUID
+2026-11-14 11:18:34,491 INFO    pynetdicom.association | (0008,0018) UI [1.2.826.0.1.3680043.8.498.8201]         # 1 SOPInstanceUID
+2026-11-14 11:18:34,491 INFO    pynetdicom.association | (0008,0052) CS [IMAGE]                                  # 1 QueryRetrieveLevel
+2026-11-14 11:18:34,491 INFO    pynetdicom.association | (0008,0054) AE [MYPACS]                                 # 1 RetrieveAETitle
+2026-11-14 11:18:34,491 INFO    pynetdicom.association | (0008,0060) CS [CT]                                     # 1 Modality
+2026-11-14 11:18:34,491 INFO    pynetdicom.association | (0020,000D) UI [1.2.826.0.1.3680043.8.498.8101]         # 1 StudyInstanceUID
+2026-11-14 11:18:34,491 INFO    pynetdicom.association | (0020,000E) UI [1.2.826.0.1.3680043.8.498.8102]         # 1 SeriesInstanceUID
+2026-11-14 11:18:34,492 INFO    pynetdicom.association | (0028,0010) US [64]                                     # 1 Rows
+2026-11-14 11:18:34,492 INFO    pynetdicom.association | (0028,0011) US [64]                                     # 1 Columns
+2026-11-14 11:18:34,492 INFO    pynetdicom.association | 
+2026-11-14 11:18:34,492 INFO    pynetdicom.association | Find SCP Response: 2 - 0xFF00 (Pending)
+2026-11-14 11:18:34,493 INFO    pynetdicom.association | 
+2026-11-14 11:18:34,493 INFO    pynetdicom.association | # Response Identifier
+2026-11-14 11:18:34,494 INFO    pynetdicom.association | (0002,0010) UI [1.2.840.10008.1.2.1]                    # 1 TransferSyntaxUID
+2026-11-14 11:18:34,494 INFO    pynetdicom.association | (0008,0016) UI [1.2.840.10008.5.1.4.1.1.2]              # 1 SOPClassUID
+2026-11-14 11:18:34,494 INFO    pynetdicom.association | (0008,0018) UI [1.2.826.0.1.3680043.8.498.8202]         # 1 SOPInstanceUID
+2026-11-14 11:18:34,494 INFO    pynetdicom.association | (0008,0052) CS [IMAGE]                                  # 1 QueryRetrieveLevel
+2026-11-14 11:18:34,494 INFO    pynetdicom.association | (0008,0054) AE [MYPACS]                                 # 1 RetrieveAETitle
+2026-11-14 11:18:34,494 INFO    pynetdicom.association | (0008,0060) CS [CT]                                     # 1 Modality
+2026-11-14 11:18:34,494 INFO    pynetdicom.association | (0020,000D) UI [1.2.826.0.1.3680043.8.498.8101]         # 1 StudyInstanceUID
+2026-11-14 11:18:34,494 INFO    pynetdicom.association | (0020,000E) UI [1.2.826.0.1.3680043.8.498.8102]         # 1 SeriesInstanceUID
+2026-11-14 11:18:34,494 INFO    pynetdicom.association | (0028,0010) US [64]                                     # 1 Rows
+2026-11-14 11:18:34,495 INFO    pynetdicom.association | (0028,0011) US [64]                                     # 1 Columns
+2026-11-14 11:18:34,495 INFO    pynetdicom.association | 
+2026-11-14 11:18:34,495 INFO    pynetdicom.association | Find SCP Response: 3 - 0xFF00 (Pending)
+2026-11-14 11:18:34,495 INFO    pynetdicom.association | 
+2026-11-14 11:18:34,496 INFO    pynetdicom.association | # Response Identifier
+2026-11-14 11:18:34,496 INFO    pynetdicom.association | (0002,0010) UI [1.2.840.10008.1.2.1]                    # 1 TransferSyntaxUID
+2026-11-14 11:18:34,496 INFO    pynetdicom.association | (0008,0016) UI [1.2.840.10008.5.1.4.1.1.2]              # 1 SOPClassUID
+2026-11-14 11:18:34,496 INFO    pynetdicom.association | (0008,0018) UI [1.2.826.0.1.3680043.8.498.8203]         # 1 SOPInstanceUID
+2026-11-14 11:18:34,496 INFO    pynetdicom.association | (0008,0052) CS [IMAGE]                                  # 1 QueryRetrieveLevel
+2026-11-14 11:18:34,497 INFO    pynetdicom.association | (0008,0054) AE [MYPACS]                                 # 1 RetrieveAETitle
+2026-11-14 11:18:34,497 INFO    pynetdicom.association | (0008,0060) CS [CT]                                     # 1 Modality
+2026-11-14 11:18:34,497 INFO    pynetdicom.association | (0020,000D) UI [1.2.826.0.1.3680043.8.498.8101]         # 1 StudyInstanceUID
+2026-11-14 11:18:34,497 INFO    pynetdicom.association | (0020,000E) UI [1.2.826.0.1.3680043.8.498.8102]         # 1 SeriesInstanceUID
+2026-11-14 11:18:34,497 INFO    pynetdicom.association | (0028,0010) US [64]                                     # 1 Rows
+2026-11-14 11:18:34,497 INFO    pynetdicom.association | (0028,0011) US [64]                                     # 1 Columns
+2026-11-14 11:18:34,497 INFO    pynetdicom.association | 
+2026-11-14 11:18:34,498 INFO    pynetdicom.association | Find SCP Response: 4 - 0xFF00 (Pending)
+2026-11-14 11:18:34,499 INFO    pynetdicom.association | 
+2026-11-14 11:18:34,500 INFO    pynetdicom.association | # Response Identifier
+2026-11-14 11:18:34,501 INFO    pynetdicom.association | (0002,0010) UI [1.2.840.10008.1.2.1]                    # 1 TransferSyntaxUID
+2026-11-14 11:18:34,501 INFO    pynetdicom.association | (0008,0016) UI [1.2.840.10008.5.1.4.1.1.2]              # 1 SOPClassUID
+2026-11-14 11:18:34,501 INFO    pynetdicom.association | (0008,0018) UI [1.2.826.0.1.3680043.8.498.8204]         # 1 SOPInstanceUID
+2026-11-14 11:18:34,501 INFO    pynetdicom.association | (0008,0052) CS [IMAGE]                                  # 1 QueryRetrieveLevel
+2026-11-14 11:18:34,501 INFO    pynetdicom.association | (0008,0054) AE [MYPACS]                                 # 1 RetrieveAETitle
+2026-11-14 11:18:34,501 INFO    pynetdicom.association | (0008,0060) CS [CT]                                     # 1 Modality
+2026-11-14 11:18:34,501 INFO    pynetdicom.association | (0020,000D) UI [1.2.826.0.1.3680043.8.498.8101]         # 1 StudyInstanceUID
+2026-11-14 11:18:34,501 INFO    pynetdicom.association | (0020,000E) UI [1.2.826.0.1.3680043.8.498.8102]         # 1 SeriesInstanceUID
+2026-11-14 11:18:34,501 INFO    pynetdicom.association | (0028,0010) US [64]                                     # 1 Rows
+2026-11-14 11:18:34,502 INFO    pynetdicom.association | (0028,0011) US [64]                                     # 1 Columns
+2026-11-14 11:18:34,502 INFO    pynetdicom.association | 
+2026-11-14 11:18:34,502 INFO    pynetdicom.association | Find SCP Response: 5 - 0xFF00 (Pending)
+2026-11-14 11:18:34,503 INFO    pynetdicom.association | 
+2026-11-14 11:18:34,503 INFO    pynetdicom.association | # Response Identifier
+2026-11-14 11:18:34,503 INFO    pynetdicom.association | (0002,0010) UI [1.2.840.10008.1.2.1]                    # 1 TransferSyntaxUID
+2026-11-14 11:18:34,503 INFO    pynetdicom.association | (0008,0016) UI [1.2.840.10008.5.1.4.1.1.2]              # 1 SOPClassUID
+2026-11-14 11:18:34,503 INFO    pynetdicom.association | (0008,0018) UI [1.2.826.0.1.3680043.8.498.8205]         # 1 SOPInstanceUID
+2026-11-14 11:18:34,504 INFO    pynetdicom.association | (0008,0052) CS [IMAGE]                                  # 1 QueryRetrieveLevel
+2026-11-14 11:18:34,504 INFO    pynetdicom.association | (0008,0054) AE [MYPACS]                                 # 1 RetrieveAETitle
+2026-11-14 11:18:34,504 INFO    pynetdicom.association | (0008,0060) CS [CT]                                     # 1 Modality
+2026-11-14 11:18:34,504 INFO    pynetdicom.association | (0020,000D) UI [1.2.826.0.1.3680043.8.498.8101]         # 1 StudyInstanceUID
+2026-11-14 11:18:34,504 INFO    pynetdicom.association | (0020,000E) UI [1.2.826.0.1.3680043.8.498.8102]         # 1 SeriesInstanceUID
+2026-11-14 11:18:34,504 INFO    pynetdicom.association | (0028,0010) US [64]                                     # 1 Rows
+2026-11-14 11:18:34,504 INFO    pynetdicom.association | (0028,0011) US [64]                                     # 1 Columns
+2026-11-14 11:18:34,504 INFO    pynetdicom.association | 
+2026-11-14 11:18:34,504 INFO    pynetdicom.association | Find SCP Response: 6 - 0xFF00 (Pending)
+2026-11-14 11:18:34,505 INFO    pynetdicom.association | 
+2026-11-14 11:18:34,505 INFO    pynetdicom.association | # Response Identifier
+2026-11-14 11:18:34,505 INFO    pynetdicom.association | (0002,0010) UI [1.2.840.10008.1.2.1]                    # 1 TransferSyntaxUID
+2026-11-14 11:18:34,505 INFO    pynetdicom.association | (0008,0016) UI [1.2.840.10008.5.1.4.1.1.2]              # 1 SOPClassUID
+2026-11-14 11:18:34,505 INFO    pynetdicom.association | (0008,0018) UI [1.2.826.0.1.3680043.8.498.8206]         # 1 SOPInstanceUID
+2026-11-14 11:18:34,506 INFO    pynetdicom.association | (0008,0052) CS [IMAGE]                                  # 1 QueryRetrieveLevel
+2026-11-14 11:18:34,506 INFO    pynetdicom.association | (0008,0054) AE [MYPACS]                                 # 1 RetrieveAETitle
+2026-11-14 11:18:34,506 INFO    pynetdicom.association | (0008,0060) CS [CT]                                     # 1 Modality
+2026-11-14 11:18:34,506 INFO    pynetdicom.association | (0020,000D) UI [1.2.826.0.1.3680043.8.498.8101]         # 1 StudyInstanceUID
+2026-11-14 11:18:34,506 INFO    pynetdicom.association | (0020,000E) UI [1.2.826.0.1.3680043.8.498.8102]         # 1 SeriesInstanceUID
+2026-11-14 11:18:34,506 INFO    pynetdicom.association | (0028,0010) US [64]                                     # 1 Rows
+2026-11-14 11:18:34,506 INFO    pynetdicom.association | (0028,0011) US [64]                                     # 1 Columns
+2026-11-14 11:18:34,506 INFO    pynetdicom.association | 
+2026-11-14 11:18:34,507 INFO    pynetdicom.association | Find SCP Response: 7 - 0xFF00 (Pending)
+2026-11-14 11:18:34,507 INFO    pynetdicom.association | 
+2026-11-14 11:18:34,507 INFO    pynetdicom.association | # Response Identifier
+2026-11-14 11:18:34,508 INFO    pynetdicom.association | (0002,0010) UI [1.2.840.10008.1.2.1]                    # 1 TransferSyntaxUID
+2026-11-14 11:18:34,508 INFO    pynetdicom.association | (0008,0016) UI [1.2.840.10008.5.1.4.1.1.2]              # 1 SOPClassUID
+2026-11-14 11:18:34,508 INFO    pynetdicom.association | (0008,0018) UI [1.2.826.0.1.3680043.8.498.8207]         # 1 SOPInstanceUID
+2026-11-14 11:18:34,508 INFO    pynetdicom.association | (0008,0052) CS [IMAGE]                                  # 1 QueryRetrieveLevel
+2026-11-14 11:18:34,508 INFO    pynetdicom.association | (0008,0054) AE [MYPACS]                                 # 1 RetrieveAETitle
+2026-11-14 11:18:34,508 INFO    pynetdicom.association | (0008,0060) CS [CT]                                     # 1 Modality
+2026-11-14 11:18:34,508 INFO    pynetdicom.association | (0020,000D) UI [1.2.826.0.1.3680043.8.498.8101]         # 1 StudyInstanceUID
+2026-11-14 11:18:34,508 INFO    pynetdicom.association | (0020,000E) UI [1.2.826.0.1.3680043.8.498.8102]         # 1 SeriesInstanceUID
+2026-11-14 11:18:34,508 INFO    pynetdicom.association | (0028,0010) US [64]                                     # 1 Rows
+2026-11-14 11:18:34,508 INFO    pynetdicom.association | (0028,0011) US [64]                                     # 1 Columns
+2026-11-14 11:18:34,508 INFO    pynetdicom.association | 
+2026-11-14 11:18:34,509 INFO    pynetdicom.association | Find SCP Result: 0x0000 (Success)
+2026-11-14 11:18:34,510 INFO    pynetdicom.association | Releasing Association
+2026-11-14 11:18:34,543 INFO    pipeline | 批 314421b9014a48f5a03ee7814ef10887 清单固定 7 个 SOP
+2026-11-14 11:18:34,548 INFO    pynetdicom.association | Requesting Association
+2026-11-14 11:18:34,556 INFO    pynetdicom.acse | Association Accepted
+2026-11-14 11:18:34,557 INFO    pynetdicom.association | Sending Move Request: MsgID 1
+2026-11-14 11:18:34,557 INFO    pynetdicom.association | 
+2026-11-14 11:18:34,557 INFO    pynetdicom.association | # Request Identifier
+2026-11-14 11:18:34,557 INFO    pynetdicom.association | (0008,0052) CS [STUDY]                                  # 1 QueryRetrieveLevel
+2026-11-14 11:18:34,557 INFO    pynetdicom.association | (0020,000D) UI [1.2.826.0.1.3680043.8.498.8101]         # 1 StudyInstanceUID
+2026-11-14 11:18:34,557 INFO    pynetdicom.association | 
+2026-11-14 11:18:34,607 INFO    pynetdicom.acse | Accepting Association
+2026-11-14 11:18:34,678 INFO    pynetdicom._handlers | Received Store Request
+2026-11-14 11:18:34,698 INFO    dicom | 批 314421b9014a48f5a03ee7814ef10887 接收实例 1.2.826.0.1.3680043.8.498.8201（1/7）
+2026-11-14 11:18:34,707 INFO    pynetdicom.association | Move SCP Response: 1 - 0xFF00 (Pending)
+2026-11-14 11:18:34,707 INFO    pynetdicom.association | Sub-Operations Remaining: 6, Completed: 1, Failed: 0, Warning: 0
+2026-11-14 11:18:34,775 INFO    pynetdicom._handlers | Received Store Request
+INFO:     127.0.0.1:38648 - "GET /batches/314421b9014a48f5a03ee7814ef10887 HTTP/1.1" 200 OK
+2026-11-14 11:18:34,786 INFO    dicom | 批 314421b9014a48f5a03ee7814ef10887 接收实例 1.2.826.0.1.3680043.8.498.8202（2/7）
+2026-11-14 11:18:34,794 INFO    pynetdicom.association | Move SCP Response: 2 - 0xFF00 (Pending)
+2026-11-14 11:18:34,794 INFO    pynetdicom.association | Sub-Operations Remaining: 5, Completed: 2, Failed: 0, Warning: 0
+2026-11-14 11:18:34,860 INFO    pynetdicom._handlers | Received Store Request
+2026-11-14 11:18:34,874 INFO    dicom | 批 314421b9014a48f5a03ee7814ef10887 接收实例 1.2.826.0.1.3680043.8.498.8203（3/7）
+2026-11-14 11:18:34,883 INFO    pynetdicom.association | Move SCP Response: 3 - 0xFF00 (Pending)
+2026-11-14 11:18:34,883 INFO    pynetdicom.association | Sub-Operations Remaining: 4, Completed: 3, Failed: 0, Warning: 0
+2026-11-14 11:18:34,950 INFO    pynetdicom._handlers | Received Store Request
+2026-11-14 11:18:34,962 INFO    dicom | 批 314421b9014a48f5a03ee7814ef10887 接收实例 1.2.826.0.1.3680043.8.498.8204（4/7）
+2026-11-14 11:18:34,973 INFO    pynetdicom.association | Move SCP Response: 4 - 0xFF00 (Pending)
+2026-11-14 11:18:34,973 INFO    pynetdicom.association | Sub-Operations Remaining: 3, Completed: 4, Failed: 0, Warning: 0
+2026-11-14 11:18:35,053 INFO    pynetdicom._handlers | Received Store Request
+2026-11-14 11:18:35,070 INFO    dicom | 批 314421b9014a48f5a03ee7814ef10887 接收实例 1.2.826.0.1.3680043.8.498.8205（5/7）
+2026-11-14 11:18:35,079 INFO    pynetdicom.association | Move SCP Response: 5 - 0xFF00 (Pending)
+2026-11-14 11:18:35,079 INFO    pynetdicom.association | Sub-Operations Remaining: 2, Completed: 5, Failed: 0, Warning: 0
+2026-11-14 11:18:35,153 INFO    pynetdicom._handlers | Received Store Request
+2026-11-14 11:18:35,164 INFO    dicom | 批 314421b9014a48f5a03ee7814ef10887 接收实例 1.2.826.0.1.3680043.8.498.8206（6/7）
+2026-11-14 11:18:35,172 INFO    pynetdicom.association | Move SCP Response: 6 - 0xFF00 (Pending)
+2026-11-14 11:18:35,172 INFO    pynetdicom.association | Sub-Operations Remaining: 1, Completed: 6, Failed: 0, Warning: 0
+INFO:     127.0.0.1:38660 - "GET /batches/314421b9014a48f5a03ee7814ef10887 HTTP/1.1" 200 OK
+2026-11-14 11:18:35,241 INFO    pynetdicom._handlers | Received Store Request
+2026-11-14 11:18:35,256 INFO    dicom | 批 314421b9014a48f5a03ee7814ef10887 接收实例 1.2.826.0.1.3680043.8.498.8207（7/7）
+2026-11-14 11:18:35,270 INFO    pynetdicom.association | Move SCP Response: 7 - 0xFF00 (Pending)
+2026-11-14 11:18:35,270 INFO    pynetdicom.association | Sub-Operations Remaining: 0, Completed: 7, Failed: 0, Warning: 0
+2026-11-14 11:18:35,271 INFO    pynetdicom.association | Association Released
+2026-11-14 11:18:35,287 INFO    pynetdicom.association | Move SCP Result: 0x0000 (Success)
+2026-11-14 11:18:35,287 INFO    pynetdicom.association | Sub-Operations Remaining: 0, Completed: 7, Failed: 0, Warning: 0
+2026-11-14 11:18:35,287 INFO    pynetdicom.association | Releasing Association
+2026-11-14 11:18:35,310 INFO    pipeline | 批 314421b9014a48f5a03ee7814ef10887 完成，ZIP=/tmp/smoke2/api/zips/314421b9014a48f5a03ee7814ef10887.zip
+INFO:     127.0.0.1:38668 - "GET /batches/314421b9014a48f5a03ee7814ef10887 HTTP/1.1" 200 OK
+2026-11-14 11:18:35,600 INFO    geometry | 几何检查完成：zip=/tmp/smoke2/api/zips/314421b9014a48f5a03ee7814ef10887.zip 序列数=1 状态=['INVALID']
+INFO:     127.0.0.1:38670 - "POST /batches/314421b9014a48f5a03ee7814ef10887/geometry-check?expected_spacing_mm=2.0&tolerance_mm=0.5 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38674 - "POST /batches HTTP/1.1" 201 Created
+2026-11-14 11:18:35,618 INFO    pynetdicom.association | Requesting Association
+INFO:     127.0.0.1:38686 - "GET /batches/2e6aee4c943a428aa2e72e535232c8c9 HTTP/1.1" 200 OK
+2026-11-14 11:18:35,624 INFO    pynetdicom.acse | Association Accepted
+2026-11-14 11:18:35,625 WARNING pydicom | A value of type 'str' cannot be assigned to a tag with VR US.
+2026-11-14 11:18:35,625 WARNING pydicom | A value of type 'str' cannot be assigned to a tag with VR US.
+2026-11-14 11:18:35,626 INFO    pynetdicom.association | Sending Find Request: MsgID 1
+2026-11-14 11:18:35,626 INFO    pynetdicom.association | 
+2026-11-14 11:18:35,626 INFO    pynetdicom.association | # Request Identifier
+2026-11-14 11:18:35,626 INFO    pynetdicom.association | (0002,0010) UI (no value available)                     # 0 TransferSyntaxUID
+2026-11-14 11:18:35,626 INFO    pynetdicom.association | (0008,0016) UI (no value available)                     # 0 SOPClassUID
+2026-11-14 11:18:35,626 INFO    pynetdicom.association | (0008,0018) UI (no value available)                     # 0 SOPInstanceUID
+2026-11-14 11:18:35,626 INFO    pynetdicom.association | (0008,0052) CS [IMAGE]                                  # 1 QueryRetrieveLevel
+2026-11-14 11:18:35,626 INFO    pynetdicom.association | (0008,0060) CS (no value available)                     # 0 Modality
+2026-11-14 11:18:35,626 INFO    pynetdicom.association | (0020,000D) UI [1.2.826.0.1.3680043.8.498.8201]         # 1 StudyInstanceUID
+2026-11-14 11:18:35,626 INFO    pynetdicom.association | (0028,0010) US (no value available)                     # 0 Rows
+2026-11-14 11:18:35,626 INFO    pynetdicom.association | (0028,0011) US (no value available)                     # 0 Columns
+2026-11-14 11:18:35,626 INFO    pynetdicom.association | 
+2026-11-14 11:18:35,718 INFO    pynetdicom.association | Find SCP Response: 1 - 0xFF00 (Pending)
+2026-11-14 11:18:35,719 INFO    pynetdicom.association | 
+2026-11-14 11:18:35,719 INFO    pynetdicom.association | # Response Identifier
+2026-11-14 11:18:35,720 INFO    pynetdicom.association | (0002,0010) UI [1.2.840.10008.1.2.1]                    # 1 TransferSyntaxUID
+2026-11-14 11:18:35,720 INFO    pynetdicom.association | (0008,0016) UI [1.2.840.10008.5.1.4.1.1.2]              # 1 SOPClassUID
+2026-11-14 11:18:35,720 INFO    pynetdicom.association | (0008,0018) UI [1.2.826.0.1.3680043.8.498.8301]         # 1 SOPInstanceUID
+2026-11-14 11:18:35,720 INFO    pynetdicom.association | (0008,0052) CS [IMAGE]                                  # 1 QueryRetrieveLevel
+2026-11-14 11:18:35,720 INFO    pynetdicom.association | (0008,0054) AE [MYPACS]                                 # 1 RetrieveAETitle
+2026-11-14 11:18:35,720 INFO    pynetdicom.association | (0008,0060) CS [CT]                                     # 1 Modality
+2026-11-14 11:18:35,720 INFO    pynetdicom.association | (0020,000D) UI [1.2.826.0.1.3680043.8.498.8201]         # 1 StudyInstanceUID
+2026-11-14 11:18:35,720 INFO    pynetdicom.association | (0020,000E) UI [1.2.826.0.1.3680043.8.498.8202]         # 1 SeriesInstanceUID
+2026-11-14 11:18:35,720 INFO    pynetdicom.association | (0028,0010) US [64]                                     # 1 Rows
+2026-11-14 11:18:35,720 INFO    pynetdicom.association | (0028,0011) US [64]                                     # 1 Columns
+2026-11-14 11:18:35,720 INFO    pynetdicom.association | 
+2026-11-14 11:18:35,721 INFO    pynetdicom.association | Find SCP Response: 2 - 0xFF00 (Pending)
+2026-11-14 11:18:35,721 INFO    pynetdicom.association | 
+2026-11-14 11:18:35,721 INFO    pynetdicom.association | # Response Identifier
+2026-11-14 11:18:35,722 INFO    pynetdicom.association | (0002,0010) UI [1.2.840.10008.1.2.1]                    # 1 TransferSyntaxUID
+2026-11-14 11:18:35,722 INFO    pynetdicom.association | (0008,0016) UI [1.2.840.10008.5.1.4.1.1.2]              # 1 SOPClassUID
+2026-11-14 11:18:35,722 INFO    pynetdicom.association | (0008,0018) UI [1.2.826.0.1.3680043.8.498.8302]         # 1 SOPInstanceUID
+2026-11-14 11:18:35,722 INFO    pynetdicom.association | (0008,0052) CS [IMAGE]                                  # 1 QueryRetrieveLevel
+2026-11-14 11:18:35,722 INFO    pynetdicom.association | (0008,0054) AE [MYPACS]                                 # 1 RetrieveAETitle
+2026-11-14 11:18:35,722 INFO    pynetdicom.association | (0008,0060) CS [CT]                                     # 1 Modality
+2026-11-14 11:18:35,722 INFO    pynetdicom.association | (0020,000D) UI [1.2.826.0.1.3680043.8.498.8201]         # 1 StudyInstanceUID
+2026-11-14 11:18:35,722 INFO    pynetdicom.association | (0020,000E) UI [1.2.826.0.1.3680043.8.498.8202]         # 1 SeriesInstanceUID
+2026-11-14 11:18:35,723 INFO    pynetdicom.association | (0028,0010) US [64]                                     # 1 Rows
+2026-11-14 11:18:35,723 INFO    pynetdicom.association | (0028,0011) US [64]                                     # 1 Columns
+2026-11-14 11:18:35,723 INFO    pynetdicom.association | 
+2026-11-14 11:18:35,723 INFO    pynetdicom.association | Find SCP Response: 3 - 0xFF00 (Pending)
+2026-11-14 11:18:35,724 INFO    pynetdicom.association | 
+2026-11-14 11:18:35,724 INFO    pynetdicom.association | # Response Identifier
+2026-11-14 11:18:35,725 INFO    pynetdicom.association | (0002,0010) UI [1.2.840.10008.1.2.1]                    # 1 TransferSyntaxUID
+2026-11-14 11:18:35,725 INFO    pynetdicom.association | (0008,0016) UI [1.2.840.10008.5.1.4.1.1.2]              # 1 SOPClassUID
+2026-11-14 11:18:35,725 INFO    pynetdicom.association | (0008,0018) UI [1.2.826.0.1.3680043.8.498.8303]         # 1 SOPInstanceUID
+2026-11-14 11:18:35,725 INFO    pynetdicom.association | (0008,0052) CS [IMAGE]                                  # 1 QueryRetrieveLevel
+2026-11-14 11:18:35,725 INFO    pynetdicom.association | (0008,0054) AE [MYPACS]                                 # 1 RetrieveAETitle
+2026-11-14 11:18:35,725 INFO    pynetdicom.association | (0008,0060) CS [CT]                                     # 1 Modality
+2026-11-14 11:18:35,725 INFO    pynetdicom.association | (0020,000D) UI [1.2.826.0.1.3680043.8.498.8201]         # 1 StudyInstanceUID
+2026-11-14 11:18:35,725 INFO    pynetdicom.association | (0020,000E) UI [1.2.826.0.1.3680043.8.498.8202]         # 1 SeriesInstanceUID
+2026-11-14 11:18:35,725 INFO    pynetdicom.association | (0028,0010) US [64]                                     # 1 Rows
+2026-11-14 11:18:35,725 INFO    pynetdicom.association | (0028,0011) US [64]                                     # 1 Columns
+2026-11-14 11:18:35,725 INFO    pynetdicom.association | 
+2026-11-14 11:18:35,725 INFO    pynetdicom.association | Find SCP Response: 4 - 0xFF00 (Pending)
+2026-11-14 11:18:35,726 INFO    pynetdicom.association | 
+2026-11-14 11:18:35,726 INFO    pynetdicom.association | # Response Identifier
+2026-11-14 11:18:35,727 INFO    pynetdicom.association | (0002,0010) UI [1.2.840.10008.1.2.1]                    # 1 TransferSyntaxUID
+2026-11-14 11:18:35,727 INFO    pynetdicom.association | (0008,0016) UI [1.2.840.10008.5.1.4.1.1.2]              # 1 SOPClassUID
+2026-11-14 11:18:35,727 INFO    pynetdicom.association | (0008,0018) UI [1.2.826.0.1.3680043.8.498.8304]         # 1 SOPInstanceUID
+2026-11-14 11:18:35,727 INFO    pynetdicom.association | (0008,0052) CS [IMAGE]                                  # 1 QueryRetrieveLevel
+2026-11-14 11:18:35,727 INFO    pynetdicom.association | (0008,0054) AE [MYPACS]                                 # 1 RetrieveAETitle
+2026-11-14 11:18:35,728 INFO    pynetdicom.association | (0008,0060) CS [CT]                                     # 1 Modality
+2026-11-14 11:18:35,728 INFO    pynetdicom.association | (0020,000D) UI [1.2.826.0.1.3680043.8.498.8201]         # 1 StudyInstanceUID
+2026-11-14 11:18:35,728 INFO    pynetdicom.association | (0020,000E) UI [1.2.826.0.1.3680043.8.498.8202]         # 1 SeriesInstanceUID
+2026-11-14 11:18:35,728 INFO    pynetdicom.association | (0028,0010) US [64]                                     # 1 Rows
+2026-11-14 11:18:35,728 INFO    pynetdicom.association | (0028,0011) US [64]                                     # 1 Columns
+2026-11-14 11:18:35,728 INFO    pynetdicom.association | 
+2026-11-14 11:18:35,728 INFO    pynetdicom.association | Find SCP Response: 5 - 0xFF00 (Pending)
+2026-11-14 11:18:35,728 INFO    pynetdicom.association | 
+2026-11-14 11:18:35,729 INFO    pynetdicom.association | # Response Identifier
+2026-11-14 11:18:35,729 INFO    pynetdicom.association | (0002,0010) UI [1.2.840.10008.1.2.1]                    # 1 TransferSyntaxUID
+2026-11-14 11:18:35,729 INFO    pynetdicom.association | (0008,0016) UI [1.2.840.10008.5.1.4.1.1.2]              # 1 SOPClassUID
+2026-11-14 11:18:35,729 INFO    pynetdicom.association | (0008,0018) UI [1.2.826.0.1.3680043.8.498.8305]         # 1 SOPInstanceUID
+2026-11-14 11:18:35,729 INFO    pynetdicom.association | (0008,0052) CS [IMAGE]                                  # 1 QueryRetrieveLevel
+2026-11-14 11:18:35,729 INFO    pynetdicom.association | (0008,0054) AE [MYPACS]                                 # 1 RetrieveAETitle
+2026-11-14 11:18:35,729 INFO    pynetdicom.association | (0008,0060) CS [CT]                                     # 1 Modality
+2026-11-14 11:18:35,729 INFO    pynetdicom.association | (0020,000D) UI [1.2.826.0.1.3680043.8.498.8201]         # 1 StudyInstanceUID
+2026-11-14 11:18:35,730 INFO    pynetdicom.association | (0020,000E) UI [1.2.826.0.1.3680043.8.498.8202]         # 1 SeriesInstanceUID
+2026-11-14 11:18:35,730 INFO    pynetdicom.association | (0028,0010) US [64]                                     # 1 Rows
+2026-11-14 11:18:35,730 INFO    pynetdicom.association | (0028,0011) US [64]                                     # 1 Columns
+2026-11-14 11:18:35,730 INFO    pynetdicom.association | 
+2026-11-14 11:18:35,730 INFO    pynetdicom.association | Find SCP Response: 6 - 0xFF00 (Pending)
+2026-11-14 11:18:35,732 INFO    pynetdicom.association | 
+2026-11-14 11:18:35,732 INFO    pynetdicom.association | # Response Identifier
+2026-11-14 11:18:35,732 INFO    pynetdicom.association | (0002,0010) UI [1.2.840.10008.1.2.1]                    # 1 TransferSyntaxUID
+2026-11-14 11:18:35,732 INFO    pynetdicom.association | (0008,0016) UI [1.2.840.10008.5.1.4.1.1.2]              # 1 SOPClassUID
+2026-11-14 11:18:35,732 INFO    pynetdicom.association | (0008,0018) UI [1.2.826.0.1.3680043.8.498.8306]         # 1 SOPInstanceUID
+2026-11-14 11:18:35,732 INFO    pynetdicom.association | (0008,0052) CS [IMAGE]                                  # 1 QueryRetrieveLevel
+2026-11-14 11:18:35,732 INFO    pynetdicom.association | (0008,0054) AE [MYPACS]                                 # 1 RetrieveAETitle
+2026-11-14 11:18:35,733 INFO    pynetdicom.association | (0008,0060) CS [CT]                                     # 1 Modality
+2026-11-14 11:18:35,733 INFO    pynetdicom.association | (0020,000D) UI [1.2.826.0.1.3680043.8.498.8201]         # 1 StudyInstanceUID
+2026-11-14 11:18:35,733 INFO    pynetdicom.association | (0020,000E) UI [1.2.826.0.1.3680043.8.498.8202]         # 1 SeriesInstanceUID
+2026-11-14 11:18:35,733 INFO    pynetdicom.association | (0028,0010) US [64]                                     # 1 Rows
+2026-11-14 11:18:35,733 INFO    pynetdicom.association | (0028,0011) US [64]                                     # 1 Columns
+2026-11-14 11:18:35,733 INFO    pynetdicom.association | 
+2026-11-14 11:18:35,733 INFO    pynetdicom.association | Find SCP Response: 7 - 0xFF00 (Pending)
+2026-11-14 11:18:35,733 INFO    pynetdicom.association | 
+2026-11-14 11:18:35,733 INFO    pynetdicom.association | # Response Identifier
+2026-11-14 11:18:35,734 INFO    pynetdicom.association | (0002,0010) UI [1.2.840.10008.1.2.1]                    # 1 TransferSyntaxUID
+2026-11-14 11:18:35,734 INFO    pynetdicom.association | (0008,0016) UI [1.2.840.10008.5.1.4.1.1.2]              # 1 SOPClassUID
+2026-11-14 11:18:35,734 INFO    pynetdicom.association | (0008,0018) UI [1.2.826.0.1.3680043.8.498.8307]         # 1 SOPInstanceUID
+2026-11-14 11:18:35,734 INFO    pynetdicom.association | (0008,0052) CS [IMAGE]                                  # 1 QueryRetrieveLevel
+2026-11-14 11:18:35,734 INFO    pynetdicom.association | (0008,0054) AE [MYPACS]                                 # 1 RetrieveAETitle
+2026-11-14 11:18:35,734 INFO    pynetdicom.association | (0008,0060) CS [CT]                                     # 1 Modality
+2026-11-14 11:18:35,734 INFO    pynetdicom.association | (0020,000D) UI [1.2.826.0.1.3680043.8.498.8201]         # 1 StudyInstanceUID
+2026-11-14 11:18:35,734 INFO    pynetdicom.association | (0020,000E) UI [1.2.826.0.1.3680043.8.498.8202]         # 1 SeriesInstanceUID
+2026-11-14 11:18:35,734 INFO    pynetdicom.association | (0028,0010) US [64]                                     # 1 Rows
+2026-11-14 11:18:35,734 INFO    pynetdicom.association | (0028,0011) US [64]                                     # 1 Columns
+2026-11-14 11:18:35,734 INFO    pynetdicom.association | 
+2026-11-14 11:18:35,735 INFO    pynetdicom.association | Find SCP Response: 8 - 0xFF00 (Pending)
+2026-11-14 11:18:35,735 INFO    pynetdicom.association | 
+2026-11-14 11:18:35,735 INFO    pynetdicom.association | # Response Identifier
+2026-11-14 11:18:35,735 INFO    pynetdicom.association | (0002,0010) UI [1.2.840.10008.1.2.1]                    # 1 TransferSyntaxUID
+2026-11-14 11:18:35,735 INFO    pynetdicom.association | (0008,0016) UI [1.2.840.10008.5.1.4.1.1.2]              # 1 SOPClassUID
+2026-11-14 11:18:35,735 INFO    pynetdicom.association | (0008,0018) UI [1.2.826.0.1.3680043.8.498.8308]         # 1 SOPInstanceUID
+2026-11-14 11:18:35,735 INFO    pynetdicom.association | (0008,0052) CS [IMAGE]                                  # 1 QueryRetrieveLevel
+2026-11-14 11:18:35,736 INFO    pynetdicom.association | (0008,0054) AE [MYPACS]                                 # 1 RetrieveAETitle
+2026-11-14 11:18:35,736 INFO    pynetdicom.association | (0008,0060) CS [CT]                                     # 1 Modality
+2026-11-14 11:18:35,736 INFO    pynetdicom.association | (0020,000D) UI [1.2.826.0.1.3680043.8.498.8201]         # 1 StudyInstanceUID
+2026-11-14 11:18:35,736 INFO    pynetdicom.association | (0020,000E) UI [1.2.826.0.1.3680043.8.498.8202]         # 1 SeriesInstanceUID
+2026-11-14 11:18:35,736 INFO    pynetdicom.association | (0028,0010) US [64]                                     # 1 Rows
+2026-11-14 11:18:35,736 INFO    pynetdicom.association | (0028,0011) US [64]                                     # 1 Columns
+2026-11-14 11:18:35,736 INFO    pynetdicom.association | 
+2026-11-14 11:18:35,736 INFO    pynetdicom.association | Find SCP Result: 0x0000 (Success)
+2026-11-14 11:18:35,736 INFO    pynetdicom.association | Releasing Association
+2026-11-14 11:18:35,764 INFO    pipeline | 批 2e6aee4c943a428aa2e72e535232c8c9 清单固定 8 个 SOP
+2026-11-14 11:18:35,769 INFO    pynetdicom.association | Requesting Association
+2026-11-14 11:18:35,779 INFO    pynetdicom.acse | Association Accepted
+2026-11-14 11:18:35,780 INFO    pynetdicom.association | Sending Move Request: MsgID 1
+2026-11-14 11:18:35,780 INFO    pynetdicom.association | 
+2026-11-14 11:18:35,781 INFO    pynetdicom.association | # Request Identifier
+2026-11-14 11:18:35,781 INFO    pynetdicom.association | (0008,0052) CS [STUDY]                                  # 1 QueryRetrieveLevel
+2026-11-14 11:18:35,781 INFO    pynetdicom.association | (0020,000D) UI [1.2.826.0.1.3680043.8.498.8201]         # 1 StudyInstanceUID
+2026-11-14 11:18:35,781 INFO    pynetdicom.association | 
+2026-11-14 11:18:35,837 INFO    pynetdicom.acse | Accepting Association
+2026-11-14 11:18:35,908 INFO    pynetdicom._handlers | Received Store Request
+2026-11-14 11:18:35,924 INFO    dicom | 批 2e6aee4c943a428aa2e72e535232c8c9 接收实例 1.2.826.0.1.3680043.8.498.8301（1/8）
+2026-11-14 11:18:35,931 INFO    pynetdicom.association | Move SCP Response: 1 - 0xFF00 (Pending)
+2026-11-14 11:18:35,931 INFO    pynetdicom.association | Sub-Operations Remaining: 7, Completed: 1, Failed: 0, Warning: 0
+2026-11-14 11:18:35,998 INFO    pynetdicom._handlers | Received Store Request
+2026-11-14 11:18:36,010 INFO    dicom | 批 2e6aee4c943a428aa2e72e535232c8c9 接收实例 1.2.826.0.1.3680043.8.498.8302（2/8）
+2026-11-14 11:18:36,018 INFO    pynetdicom.association | Move SCP Response: 2 - 0xFF00 (Pending)
+2026-11-14 11:18:36,018 INFO    pynetdicom.association | Sub-Operations Remaining: 6, Completed: 2, Failed: 0, Warning: 0
+INFO:     127.0.0.1:38688 - "GET /batches/2e6aee4c943a428aa2e72e535232c8c9 HTTP/1.1" 200 OK
+2026-11-14 11:18:36,086 INFO    pynetdicom._handlers | Received Store Request
+2026-11-14 11:18:36,104 INFO    dicom | 批 2e6aee4c943a428aa2e72e535232c8c9 接收实例 1.2.826.0.1.3680043.8.498.8303（3/8）
+2026-11-14 11:18:36,116 INFO    pynetdicom.association | Move SCP Response: 3 - 0xFF00 (Pending)
+2026-11-14 11:18:36,116 INFO    pynetdicom.association | Sub-Operations Remaining: 5, Completed: 3, Failed: 0, Warning: 0
+2026-11-14 11:18:36,187 INFO    pynetdicom._handlers | Received Store Request
+2026-11-14 11:18:36,205 INFO    dicom | 批 2e6aee4c943a428aa2e72e535232c8c9 接收实例 1.2.826.0.1.3680043.8.498.8304（4/8）
+2026-11-14 11:18:36,220 INFO    pynetdicom.association | Move SCP Response: 4 - 0xFF00 (Pending)
+2026-11-14 11:18:36,220 INFO    pynetdicom.association | Sub-Operations Remaining: 4, Completed: 4, Failed: 0, Warning: 0
+2026-11-14 11:18:36,287 INFO    pynetdicom._handlers | Received Store Request
+2026-11-14 11:18:36,299 INFO    dicom | 批 2e6aee4c943a428aa2e72e535232c8c9 接收实例 1.2.826.0.1.3680043.8.498.8305（5/8）
+2026-11-14 11:18:36,307 INFO    pynetdicom.association | Move SCP Response: 5 - 0xFF00 (Pending)
+2026-11-14 11:18:36,308 INFO    pynetdicom.association | Sub-Operations Remaining: 3, Completed: 5, Failed: 0, Warning: 0
+2026-11-14 11:18:36,374 INFO    pynetdicom._handlers | Received Store Request
+2026-11-14 11:18:36,396 INFO    dicom | 批 2e6aee4c943a428aa2e72e535232c8c9 接收实例 1.2.826.0.1.3680043.8.498.8306（6/8）
+2026-11-14 11:18:36,416 INFO    pynetdicom.association | Move SCP Response: 6 - 0xFF00 (Pending)
+2026-11-14 11:18:36,418 INFO    pynetdicom.association | Sub-Operations Remaining: 2, Completed: 6, Failed: 0, Warning: 0
+INFO:     127.0.0.1:38700 - "GET /batches/2e6aee4c943a428aa2e72e535232c8c9 HTTP/1.1" 200 OK
+2026-11-14 11:18:36,481 INFO    pynetdicom._handlers | Received Store Request
+2026-11-14 11:18:36,509 INFO    dicom | 批 2e6aee4c943a428aa2e72e535232c8c9 接收实例 1.2.826.0.1.3680043.8.498.8307（7/8）
+2026-11-14 11:18:36,520 INFO    pynetdicom.association | Move SCP Response: 7 - 0xFF00 (Pending)
+2026-11-14 11:18:36,520 INFO    pynetdicom.association | Sub-Operations Remaining: 1, Completed: 7, Failed: 0, Warning: 0
+2026-11-14 11:18:36,596 INFO    pynetdicom._handlers | Received Store Request
+2026-11-14 11:18:36,610 INFO    dicom | 批 2e6aee4c943a428aa2e72e535232c8c9 接收实例 1.2.826.0.1.3680043.8.498.8308（8/8）
+2026-11-14 11:18:36,617 INFO    pynetdicom.association | Move SCP Response: 8 - 0xFF00 (Pending)
+2026-11-14 11:18:36,617 INFO    pynetdicom.association | Sub-Operations Remaining: 0, Completed: 8, Failed: 0, Warning: 0
+2026-11-14 11:18:36,618 INFO    pynetdicom.association | Association Released
+2026-11-14 11:18:36,636 INFO    pynetdicom.association | Move SCP Result: 0x0000 (Success)
+2026-11-14 11:18:36,636 INFO    pynetdicom.association | Sub-Operations Remaining: 0, Completed: 8, Failed: 0, Warning: 0
+2026-11-14 11:18:36,636 INFO    pynetdicom.association | Releasing Association
+2026-11-14 11:18:36,659 INFO    pipeline | 批 2e6aee4c943a428aa2e72e535232c8c9 完成，ZIP=/tmp/smoke2/api/zips/2e6aee4c943a428aa2e72e535232c8c9.zip
+INFO:     127.0.0.1:38704 - "GET /batches/2e6aee4c943a428aa2e72e535232c8c9 HTTP/1.1" 200 OK
+2026-11-14 11:18:36,848 INFO    geometry | 几何检查完成：zip=/tmp/smoke2/api/zips/2e6aee4c943a428aa2e72e535232c8c9.zip 序列数=1 状态=['INDETERMINATE']
+INFO:     127.0.0.1:38712 - "POST /batches/2e6aee4c943a428aa2e72e535232c8c9/geometry-check?expected_spacing_mm=2.0&tolerance_mm=0.5 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38720 - "POST /batches HTTP/1.1" 201 Created
+2026-11-14 11:18:36,865 INFO    pynetdicom.association | Requesting Association
+INFO:     127.0.0.1:38728 - "GET /batches/c76b07ebb1bb438a8f8c095ec63c6eac HTTP/1.1" 200 OK
+2026-11-14 11:18:36,872 INFO    pynetdicom.acse | Association Accepted
+2026-11-14 11:18:36,873 WARNING pydicom | A value of type 'str' cannot be assigned to a tag with VR US.
+2026-11-14 11:18:36,874 WARNING pydicom | A value of type 'str' cannot be assigned to a tag with VR US.
+2026-11-14 11:18:36,876 INFO    pynetdicom.association | Sending Find Request: MsgID 1
+2026-11-14 11:18:36,877 INFO    pynetdicom.association | 
+2026-11-14 11:18:36,878 INFO    pynetdicom.association | # Request Identifier
+2026-11-14 11:18:36,878 INFO    pynetdicom.association | (0002,0010) UI (no value available)                     # 0 TransferSyntaxUID
+2026-11-14 11:18:36,879 INFO    pynetdicom.association | (0008,0016) UI (no value available)                     # 0 SOPClassUID
+2026-11-14 11:18:36,879 INFO    pynetdicom.association | (0008,0018) UI (no value available)                     # 0 SOPInstanceUID
+2026-11-14 11:18:36,879 INFO    pynetdicom.association | (0008,0052) CS [IMAGE]                                  # 1 QueryRetrieveLevel
+2026-11-14 11:18:36,879 INFO    pynetdicom.association | (0008,0060) CS (no value available)                     # 0 Modality
+2026-11-14 11:18:36,879 INFO    pynetdicom.association | (0020,000D) UI [1.2.826.0.1.3680043.8.498.8101]         # 1 StudyInstanceUID
+2026-11-14 11:18:36,879 INFO    pynetdicom.association | (0028,0010) US (no value available)                     # 0 Rows
+2026-11-14 11:18:36,879 INFO    pynetdicom.association | (0028,0011) US (no value available)                     # 0 Columns
+2026-11-14 11:18:36,879 INFO    pynetdicom.association | 
+2026-11-14 11:18:36,973 INFO    pynetdicom.association | Find SCP Response: 1 - 0xFF00 (Pending)
+2026-11-14 11:18:36,975 INFO    pynetdicom.association | 
+2026-11-14 11:18:36,975 INFO    pynetdicom.association | # Response Identifier
+2026-11-14 11:18:36,976 INFO    pynetdicom.association | (0002,0010) UI [1.2.840.10008.1.2.1]                    # 1 TransferSyntaxUID
+2026-11-14 11:18:36,976 INFO    pynetdicom.association | (0008,0016) UI [1.2.840.10008.5.1.4.1.1.2]              # 1 SOPClassUID
+2026-11-14 11:18:36,976 INFO    pynetdicom.association | (0008,0018) UI [1.2.826.0.1.3680043.8.498.8201]         # 1 SOPInstanceUID
+2026-11-14 11:18:36,978 INFO    pynetdicom.association | (0008,0052) CS [IMAGE]                                  # 1 QueryRetrieveLevel
+2026-11-14 11:18:36,978 INFO    pynetdicom.association | (0008,0054) AE [MYPACS]                                 # 1 RetrieveAETitle
+2026-11-14 11:18:36,978 INFO    pynetdicom.association | (0008,0060) CS [CT]                                     # 1 Modality
+2026-11-14 11:18:36,978 INFO    pynetdicom.association | (0020,000D) UI [1.2.826.0.1.3680043.8.498.8101]         # 1 StudyInstanceUID
+2026-11-14 11:18:36,978 INFO    pynetdicom.association | (0020,000E) UI [1.2.826.0.1.3680043.8.498.8102]         # 1 SeriesInstanceUID
+2026-11-14 11:18:36,978 INFO    pynetdicom.association | (0028,0010) US [64]                                     # 1 Rows
+2026-11-14 11:18:36,978 INFO    pynetdicom.association | (0028,0011) US [64]                                     # 1 Columns
+2026-11-14 11:18:36,978 INFO    pynetdicom.association | 
+2026-11-14 11:18:36,978 INFO    pynetdicom.association | Find SCP Response: 2 - 0xFF00 (Pending)
+2026-11-14 11:18:36,980 INFO    pynetdicom.association | 
+2026-11-14 11:18:36,980 INFO    pynetdicom.association | # Response Identifier
+2026-11-14 11:18:36,981 INFO    pynetdicom.association | (0002,0010) UI [1.2.840.10008.1.2.1]                    # 1 TransferSyntaxUID
+2026-11-14 11:18:36,981 INFO    pynetdicom.association | (0008,0016) UI [1.2.840.10008.5.1.4.1.1.2]              # 1 SOPClassUID
+2026-11-14 11:18:36,981 INFO    pynetdicom.association | (0008,0018) UI [1.2.826.0.1.3680043.8.498.8202]         # 1 SOPInstanceUID
+2026-11-14 11:18:36,981 INFO    pynetdicom.association | (0008,0052) CS [IMAGE]                                  # 1 QueryRetrieveLevel
+2026-11-14 11:18:36,981 INFO    pynetdicom.association | (0008,0054) AE [MYPACS]                                 # 1 RetrieveAETitle
+2026-11-14 11:18:36,981 INFO    pynetdicom.association | (0008,0060) CS [CT]                                     # 1 Modality
+2026-11-14 11:18:36,981 INFO    pynetdicom.association | (0020,000D) UI [1.2.826.0.1.3680043.8.498.8101]         # 1 StudyInstanceUID
+2026-11-14 11:18:36,982 INFO    pynetdicom.association | (0020,000E) UI [1.2.826.0.1.3680043.8.498.8102]         # 1 SeriesInstanceUID
+2026-11-14 11:18:36,982 INFO    pynetdicom.association | (0028,0010) US [64]                                     # 1 Rows
+2026-11-14 11:18:36,982 INFO    pynetdicom.association | (0028,0011) US [64]                                     # 1 Columns
+2026-11-14 11:18:36,982 INFO    pynetdicom.association | 
+2026-11-14 11:18:36,982 INFO    pynetdicom.association | Find SCP Response: 3 - 0xFF00 (Pending)
+2026-11-14 11:18:36,983 INFO    pynetdicom.association | 
+2026-11-14 11:18:36,983 INFO    pynetdicom.association | # Response Identifier
+2026-11-14 11:18:36,984 INFO    pynetdicom.association | (0002,0010) UI [1.2.840.10008.1.2.1]                    # 1 TransferSyntaxUID
+2026-11-14 11:18:36,984 INFO    pynetdicom.association | (0008,0016) UI [1.2.840.10008.5.1.4.1.1.2]              # 1 SOPClassUID
+2026-11-14 11:18:36,984 INFO    pynetdicom.association | (0008,0018) UI [1.2.826.0.1.3680043.8.498.8203]         # 1 SOPInstanceUID
+2026-11-14 11:18:36,984 INFO    pynetdicom.association | (0008,0052) CS [IMAGE]                                  # 1 QueryRetrieveLevel
+2026-11-14 11:18:36,984 INFO    pynetdicom.association | (0008,0054) AE [MYPACS]                                 # 1 RetrieveAETitle
+2026-11-14 11:18:36,984 INFO    pynetdicom.association | (0008,0060) CS [CT]                                     # 1 Modality
+2026-11-14 11:18:36,984 INFO    pynetdicom.association | (0020,000D) UI [1.2.826.0.1.3680043.8.498.8101]         # 1 StudyInstanceUID
+2026-11-14 11:18:36,984 INFO    pynetdicom.association | (0020,000E) UI [1.2.826.0.1.3680043.8.498.8102]         # 1 SeriesInstanceUID
+2026-11-14 11:18:36,984 INFO    pynetdicom.association | (0028,0010) US [64]                                     # 1 Rows
+2026-11-14 11:18:36,984 INFO    pynetdicom.association | (0028,0011) US [64]                                     # 1 Columns
+2026-11-14 11:18:36,984 INFO    pynetdicom.association | 
+2026-11-14 11:18:36,984 INFO    pynetdicom.association | Find SCP Response: 4 - 0xFF00 (Pending)
+2026-11-14 11:18:36,986 INFO    pynetdicom.association | 
+2026-11-14 11:18:36,986 INFO    pynetdicom.association | # Response Identifier
+2026-11-14 11:18:36,987 INFO    pynetdicom.association | (0002,0010) UI [1.2.840.10008.1.2.1]                    # 1 TransferSyntaxUID
+2026-11-14 11:18:36,987 INFO    pynetdicom.association | (0008,0016) UI [1.2.840.10008.5.1.4.1.1.2]              # 1 SOPClassUID
+2026-11-14 11:18:36,987 INFO    pynetdicom.association | (0008,0018) UI [1.2.826.0.1.3680043.8.498.8204]         # 1 SOPInstanceUID
+2026-11-14 11:18:36,987 INFO    pynetdicom.association | (0008,0052) CS [IMAGE]                                  # 1 QueryRetrieveLevel
+2026-11-14 11:18:36,987 INFO    pynetdicom.association | (0008,0054) AE [MYPACS]                                 # 1 RetrieveAETitle
+2026-11-14 11:18:36,987 INFO    pynetdicom.association | (0008,0060) CS [CT]                                     # 1 Modality
+2026-11-14 11:18:36,987 INFO    pynetdicom.association | (0020,000D) UI [1.2.826.0.1.3680043.8.498.8101]         # 1 StudyInstanceUID
+2026-11-14 11:18:36,987 INFO    pynetdicom.association | (0020,000E) UI [1.2.826.0.1.3680043.8.498.8102]         # 1 SeriesInstanceUID
+2026-11-14 11:18:36,987 INFO    pynetdicom.association | (0028,0010) US [64]                                     # 1 Rows
+2026-11-14 11:18:36,987 INFO    pynetdicom.association | (0028,0011) US [64]                                     # 1 Columns
+2026-11-14 11:18:36,987 INFO    pynetdicom.association | 
+2026-11-14 11:18:36,987 INFO    pynetdicom.association | Find SCP Response: 5 - 0xFF00 (Pending)
+2026-11-14 11:18:36,988 INFO    pynetdicom.association | 
+2026-11-14 11:18:36,988 INFO    pynetdicom.association | # Response Identifier
+2026-11-14 11:18:36,988 INFO    pynetdicom.association | (0002,0010) UI [1.2.840.10008.1.2.1]                    # 1 TransferSyntaxUID
+2026-11-14 11:18:36,988 INFO    pynetdicom.association | (0008,0016) UI [1.2.840.10008.5.1.4.1.1.2]              # 1 SOPClassUID
+2026-11-14 11:18:36,988 INFO    pynetdicom.association | (0008,0018) UI [1.2.826.0.1.3680043.8.498.8205]         # 1 SOPInstanceUID
+2026-11-14 11:18:36,988 INFO    pynetdicom.association | (0008,0052) CS [IMAGE]                                  # 1 QueryRetrieveLevel
+2026-11-14 11:18:36,988 INFO    pynetdicom.association | (0008,0054) AE [MYPACS]                                 # 1 RetrieveAETitle
+2026-11-14 11:18:36,988 INFO    pynetdicom.association | (0008,0060) CS [CT]                                     # 1 Modality
+2026-11-14 11:18:36,988 INFO    pynetdicom.association | (0020,000D) UI [1.2.826.0.1.3680043.8.498.8101]         # 1 StudyInstanceUID
+2026-11-14 11:18:36,989 INFO    pynetdicom.association | (0020,000E) UI [1.2.826.0.1.3680043.8.498.8102]         # 1 SeriesInstanceUID
+2026-11-14 11:18:36,989 INFO    pynetdicom.association | (0028,0010) US [64]                                     # 1 Rows
+2026-11-14 11:18:36,989 INFO    pynetdicom.association | (0028,0011) US [64]                                     # 1 Columns
+2026-11-14 11:18:36,989 INFO    pynetdicom.association | 
+2026-11-14 11:18:36,989 INFO    pynetdicom.association | Find SCP Response: 6 - 0xFF00 (Pending)
+2026-11-14 11:18:36,989 INFO    pynetdicom.association | 
+2026-11-14 11:18:36,989 INFO    pynetdicom.association | # Response Identifier
+2026-11-14 11:18:36,990 INFO    pynetdicom.association | (0002,0010) UI [1.2.840.10008.1.2.1]                    # 1 TransferSyntaxUID
+2026-11-14 11:18:36,990 INFO    pynetdicom.association | (0008,0016) UI [1.2.840.10008.5.1.4.1.1.2]              # 1 SOPClassUID
+2026-11-14 11:18:36,990 INFO    pynetdicom.association | (0008,0018) UI [1.2.826.0.1.3680043.8.498.8206]         # 1 SOPInstanceUID
+2026-11-14 11:18:36,990 INFO    pynetdicom.association | (0008,0052) CS [IMAGE]                                  # 1 QueryRetrieveLevel
+2026-11-14 11:18:36,990 INFO    pynetdicom.association | (0008,0054) AE [MYPACS]                                 # 1 RetrieveAETitle
+2026-11-14 11:18:36,990 INFO    pynetdicom.association | (0008,0060) CS [CT]                                     # 1 Modality
+2026-11-14 11:18:36,990 INFO    pynetdicom.association | (0020,000D) UI [1.2.826.0.1.3680043.8.498.8101]         # 1 StudyInstanceUID
+2026-11-14 11:18:36,990 INFO    pynetdicom.association | (0020,000E) UI [1.2.826.0.1.3680043.8.498.8102]         # 1 SeriesInstanceUID
+2026-11-14 11:18:36,990 INFO    pynetdicom.association | (0028,0010) US [64]                                     # 1 Rows
+2026-11-14 11:18:36,990 INFO    pynetdicom.association | (0028,0011) US [64]                                     # 1 Columns
+2026-11-14 11:18:36,990 INFO    pynetdicom.association | 
+2026-11-14 11:18:36,990 INFO    pynetdicom.association | Find SCP Response: 7 - 0xFF00 (Pending)
+2026-11-14 11:18:36,991 INFO    pynetdicom.association | 
+2026-11-14 11:18:36,991 INFO    pynetdicom.association | # Response Identifier
+2026-11-14 11:18:36,991 INFO    pynetdicom.association | (0002,0010) UI [1.2.840.10008.1.2.1]                    # 1 TransferSyntaxUID
+2026-11-14 11:18:36,991 INFO    pynetdicom.association | (0008,0016) UI [1.2.840.10008.5.1.4.1.1.2]              # 1 SOPClassUID
+2026-11-14 11:18:36,991 INFO    pynetdicom.association | (0008,0018) UI [1.2.826.0.1.3680043.8.498.8207]         # 1 SOPInstanceUID
+2026-11-14 11:18:36,991 INFO    pynetdicom.association | (0008,0052) CS [IMAGE]                                  # 1 QueryRetrieveLevel
+2026-11-14 11:18:36,991 INFO    pynetdicom.association | (0008,0054) AE [MYPACS]                                 # 1 RetrieveAETitle
+2026-11-14 11:18:36,991 INFO    pynetdicom.association | (0008,0060) CS [CT]                                     # 1 Modality
+2026-11-14 11:18:36,992 INFO    pynetdicom.association | (0020,000D) UI [1.2.826.0.1.3680043.8.498.8101]         # 1 StudyInstanceUID
+2026-11-14 11:18:36,992 INFO    pynetdicom.association | (0020,000E) UI [1.2.826.0.1.3680043.8.498.8102]         # 1 SeriesInstanceUID
+2026-11-14 11:18:36,992 INFO    pynetdicom.association | (0028,0010) US [64]                                     # 1 Rows
+2026-11-14 11:18:36,992 INFO    pynetdicom.association | (0028,0011) US [64]                                     # 1 Columns
+2026-11-14 11:18:36,992 INFO    pynetdicom.association | 
+2026-11-14 11:18:36,992 INFO    pynetdicom.association | Find SCP Result: 0x0000 (Success)
+2026-11-14 11:18:36,992 INFO    pynetdicom.association | Releasing Association
+2026-11-14 11:18:37,021 INFO    pipeline | 批 c76b07ebb1bb438a8f8c095ec63c6eac 清单固定 7 个 SOP
+2026-11-14 11:18:37,028 INFO    pynetdicom.association | Requesting Association
+2026-11-14 11:18:37,036 INFO    pynetdicom.acse | Association Accepted
+2026-11-14 11:18:37,036 INFO    pynetdicom.association | Sending Move Request: MsgID 1
+2026-11-14 11:18:37,036 INFO    pynetdicom.association | 
+2026-11-14 11:18:37,037 INFO    pynetdicom.association | # Request Identifier
+2026-11-14 11:18:37,037 INFO    pynetdicom.association | (0008,0052) CS [STUDY]                                  # 1 QueryRetrieveLevel
+2026-11-14 11:18:37,037 INFO    pynetdicom.association | (0020,000D) UI [1.2.826.0.1.3680043.8.498.8101]         # 1 StudyInstanceUID
+2026-11-14 11:18:37,037 INFO    pynetdicom.association | 
+2026-11-14 11:18:37,096 INFO    pynetdicom.acse | Accepting Association
+2026-11-14 11:18:37,170 INFO    pynetdicom._handlers | Received Store Request
+2026-11-14 11:18:37,190 INFO    dicom | 批 c76b07ebb1bb438a8f8c095ec63c6eac 接收实例 1.2.826.0.1.3680043.8.498.8201（1/7）
+2026-11-14 11:18:37,200 INFO    pynetdicom.association | Move SCP Response: 1 - 0xFF00 (Pending)
+2026-11-14 11:18:37,200 INFO    pynetdicom.association | Sub-Operations Remaining: 6, Completed: 1, Failed: 0, Warning: 0
+2026-11-14 11:18:37,266 INFO    pynetdicom._handlers | Received Store Request
+INFO:     127.0.0.1:38734 - "GET /batches/c76b07ebb1bb438a8f8c095ec63c6eac HTTP/1.1" 200 OK
+2026-11-14 11:18:37,287 INFO    dicom | 批 c76b07ebb1bb438a8f8c095ec63c6eac 接收实例 1.2.826.0.1.3680043.8.498.8202（2/7）
+2026-11-14 11:18:37,296 INFO    pynetdicom.association | Move SCP Response: 2 - 0xFF00 (Pending)
+2026-11-14 11:18:37,296 INFO    pynetdicom.association | Sub-Operations Remaining: 5, Completed: 2, Failed: 0, Warning: 0
+2026-11-14 11:18:37,365 INFO    pynetdicom._handlers | Received Store Request
+2026-11-14 11:18:37,387 INFO    dicom | 批 c76b07ebb1bb438a8f8c095ec63c6eac 接收实例 1.2.826.0.1.3680043.8.498.8203（3/7）
+2026-11-14 11:18:37,399 INFO    pynetdicom.association | Move SCP Response: 3 - 0xFF00 (Pending)
+2026-11-14 11:18:37,399 INFO    pynetdicom.association | Sub-Operations Remaining: 4, Completed: 3, Failed: 0, Warning: 0
+2026-11-14 11:18:37,471 INFO    pynetdicom._handlers | Received Store Request
+2026-11-14 11:18:37,489 INFO    dicom | 批 c76b07ebb1bb438a8f8c095ec63c6eac 接收实例 1.2.826.0.1.3680043.8.498.8204（4/7）
+2026-11-14 11:18:37,501 INFO    pynetdicom.association | Move SCP Response: 4 - 0xFF00 (Pending)
+2026-11-14 11:18:37,501 INFO    pynetdicom.association | Sub-Operations Remaining: 3, Completed: 4, Failed: 0, Warning: 0
+2026-11-14 11:18:37,570 INFO    pynetdicom._handlers | Received Store Request
+2026-11-14 11:18:37,582 INFO    dicom | 批 c76b07ebb1bb438a8f8c095ec63c6eac 接收实例 1.2.826.0.1.3680043.8.498.8205（5/7）
+2026-11-14 11:18:37,590 INFO    pynetdicom.association | Move SCP Response: 5 - 0xFF00 (Pending)
+2026-11-14 11:18:37,591 INFO    pynetdicom.association | Sub-Operations Remaining: 2, Completed: 5, Failed: 0, Warning: 0
+2026-11-14 11:18:37,658 INFO    pynetdicom._handlers | Received Store Request
+INFO:     127.0.0.1:38736 - "GET /batches/c76b07ebb1bb438a8f8c095ec63c6eac HTTP/1.1" 200 OK
+2026-11-14 11:18:37,740 INFO    dicom | 批 c76b07ebb1bb438a8f8c095ec63c6eac 接收实例 1.2.826.0.1.3680043.8.498.8206（6/7）
+2026-11-14 11:18:37,749 INFO    pynetdicom.association | Move SCP Response: 6 - 0xFF00 (Pending)
+2026-11-14 11:18:37,749 INFO    pynetdicom.association | Sub-Operations Remaining: 1, Completed: 6, Failed: 0, Warning: 0
+2026-11-14 11:18:37,777 INFO    pynetdicom._handlers | Received Store Request
+2026-11-14 11:18:37,804 INFO    dicom | 批 c76b07ebb1bb438a8f8c095ec63c6eac 接收实例 1.2.826.0.1.3680043.8.498.8207（7/7）
+2026-11-14 11:18:37,813 INFO    pynetdicom.association | Move SCP Response: 7 - 0xFF00 (Pending)
+2026-11-14 11:18:37,813 INFO    pynetdicom.association | Sub-Operations Remaining: 0, Completed: 7, Failed: 0, Warning: 0
+2026-11-14 11:18:37,814 INFO    pynetdicom.association | Association Released
+2026-11-14 11:18:37,820 INFO    pynetdicom.association | Move SCP Result: 0x0000 (Success)
+2026-11-14 11:18:37,820 INFO    pynetdicom.association | Sub-Operations Remaining: 0, Completed: 7, Failed: 0, Warning: 0
+2026-11-14 11:18:37,820 INFO    pynetdicom.association | Releasing Association
+2026-11-14 11:18:37,845 INFO    pipeline | 批 c76b07ebb1bb438a8f8c095ec63c6eac 完成，ZIP=/tmp/smoke2/api/zips/c76b07ebb1bb438a8f8c095ec63c6eac.zip
+INFO:     127.0.0.1:38746 - "GET /batches/c76b07ebb1bb438a8f8c095ec63c6eac HTTP/1.1" 200 OK
+2026-11-14 11:18:38,142 INFO    geometry | 几何检查完成：zip=/tmp/smoke2/api/zips/c76b07ebb1bb438a8f8c095ec63c6eac.zip 序列数=1 状态=['VALID']
+INFO:     127.0.0.1:38756 - "POST /batches/c76b07ebb1bb438a8f8c095ec63c6eac/geometry-check?expected_spacing_mm=2.0&tolerance_mm=2.0 HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [5567]

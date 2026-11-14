@@ -11,7 +11,9 @@ fi
 
 if [ ! -f "$DATA_DIR/studies.json" ]; then
     echo "[pacs-init] 数据卷为空，生成虚构合成 CT ..."
-    python -m simulator.generate_data --out "$DATA_DIR" --counts "${STUDY_COUNTS:-8,6,5}"
+    python -m simulator.generate_data --out "$DATA_DIR" \
+        --counts "${STUDY_COUNTS:-8,6,5}" \
+        --defects "${DEFECT_STUDIES:-all}"
 else
     echo "[pacs-init] 复用已有数据：$DATA_DIR/studies.json"
 fi

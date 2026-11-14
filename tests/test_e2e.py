@@ -72,10 +72,11 @@ def env_stack(tmp_path_factory):
             time.sleep(0.3)
         raise RuntimeError(f"端口 {port} 长时间被占用")
 
-    # 1) 生成虚构 CT
+    # 1) 生成虚构 CT（含全部几何缺陷检查，供几何检查 API 演示）
     gen = subprocess.run(
         [sys.executable, "-m", "simulator.generate_data",
-         "--out", str(pacs_data), "--counts", "6,5,4"],
+         "--out", str(pacs_data), "--counts", "6,5,4",
+         "--defects", "all"],
         cwd=ROOT, check=True, capture_output=True, text=True,
     )
     assert gen.returncode == 0
@@ -212,7 +213,8 @@ def test_01_health_and_pacs_listing(env_stack):
     r = requests.get(f"{env_stack['base']}/health", timeout=5)
     assert r.ok and r.json()["status"] == "ok"
     studies = _studies(env_stack)
-    assert len(studies) == 3
+    # 3 个正常检查 + 6 个几何缺陷检查（缺层/重层/层距异常/方向/标签缺失/单片）
+    assert len(studies) == 9
     assert all(s["modality"] == "CT" for s in studies)
 
 
@@ -540,3 +542,225 @@ def test_09_restart_recovery(env_stack):
         assert dl.status_code == 200
     finally:
         pass
+
+
+# ==================================================== 切片几何检查 API
+def _submit_and_complete(stack, study_uid):
+    r = requests.post(f"{stack['base']}/batches",
+                      json={"study_instance_uid": study_uid}, timeout=10)
+    assert r.status_code == 201, r.text
+    bid = r.json()["id"]
+    view = _wait_terminal(stack, bid)
+    assert view["state"] == "COMPLETED", view
+    return bid
+
+
+def test_10_geometry_check_happy_path_is_usable(env_stack):
+    studies = _studies(env_stack)
+    bid = _submit_and_complete(env_stack, studies[0]["study_instance_uid"])
+    r = requests.post(
+        f"{env_stack['base']}/batches/{bid}/geometry-check",
+        params={"expected_spacing_mm": 2.0, "tolerance_mm": 0.5},
+        timeout=30,
+    )
+    assert r.status_code == 200, r.text
+    report = r.json()
+    assert report["scan_completed"] is True
+    assert report["usable"] is True
+    assert report["verdict"] == "USABLE"
+    assert report["series_count"] == 1
+    series = report["series"][0]
+    assert series["status"] == "VALID"
+    assert series["slice_count"] == studies[0]["instances"]
+    assert series["anomalies"] == []
+    # 轴位序列法向应为 +Z
+    assert series["normal"] == [0.0, 0.0, 1.0]
+    assert len(series["slice_spacings"]) == series["slice_count"] - 1
+
+    # 事件流水留有几何检查记录
+    events = requests.get(
+        f"{env_stack['base']}/batches/{bid}/events", timeout=5).json()
+    assert any(e["kind"] == "GEOMETRY_CHECK" for e in events)
+
+
+def test_11_geometry_check_detects_missing_slice_study(env_stack):
+    # 找到缺层缺陷检查（PACS 注册信息来自 studies.json，直接读目录确认）
+    import json
+    manifest = json.loads(
+        (env_stack["pacs_data"] / "studies.json").read_text())
+    missing_study = next(
+        m["study_instance_uid"] for m in manifest
+        if m.get("defect_type") == "missing")
+
+    bid = _submit_and_complete(env_stack, missing_study)
+    r = requests.post(
+        f"{env_stack['base']}/batches/{bid}/geometry-check",
+        params={"expected_spacing_mm": 2.0, "tolerance_mm": 0.5},
+        timeout=30,
+    )
+    assert r.status_code == 200
+    report = r.json()
+    assert report["usable"] is False
+    assert report["verdict"] == "NOT_USABLE"
+    series = report["series"][0]
+    assert series["status"] == "INVALID"
+    types = {a["type"] for a in series["anomalies"]}
+    assert "MISSING_SLICE" in types
+
+
+def test_12_geometry_check_indeterminate_never_passes(env_stack):
+    import json
+    manifest = json.loads(
+        (env_stack["pacs_data"] / "studies.json").read_text())
+
+    for defect in ("no_tag", "single"):
+        study = next(m["study_instance_uid"] for m in manifest
+                     if m.get("defect_type") == defect)
+        bid = _submit_and_complete(env_stack, study)
+        r = requests.post(
+            f"{env_stack['base']}/batches/{bid}/geometry-check",
+            params={"expected_spacing_mm": 2.0, "tolerance_mm": 0.5},
+            timeout=30,
+        )
+        assert r.status_code == 200
+        report = r.json()
+        # 标签缺失/不足两片：只能无法判定，绝不能 usable
+        assert report["usable"] is False
+        assert report["verdict"] == "INDETERMINATE"
+        assert all(s["status"] == "INDETERMINATE" for s in report["series"])
+
+
+def test_13_geometry_check_all_defect_types_classified(env_stack):
+    import json
+    manifest = json.loads(
+        (env_stack["pacs_data"] / "studies.json").read_text())
+    expect = {
+        "missing": ("NOT_USABLE", "MISSING_SLICE"),
+        "duplicate": ("NOT_USABLE", "DUPLICATE_SLICE"),
+        "spacing": ("NOT_USABLE", "SPACING_ANOMALY"),
+        "orientation": ("NOT_USABLE", "ORIENTATION_INCONSISTENT"),
+        "no_tag": ("INDETERMINATE", "MISSING_GEOMETRY_TAG"),
+        "single": ("INDETERMINATE", "NOT_ENOUGH_SLICES"),
+    }
+    for defect, (verdict, anomaly) in expect.items():
+        study = next(m["study_instance_uid"] for m in manifest
+                     if m.get("defect_type") == defect)
+        bid = _submit_and_complete(env_stack, study)
+        r = requests.post(
+            f"{env_stack['base']}/batches/{bid}/geometry-check",
+            params={"expected_spacing_mm": 2.0, "tolerance_mm": 0.5},
+            timeout=30,
+        )
+        assert r.status_code == 200, (defect, r.text)
+        report = r.json()
+        assert report["verdict"] == verdict, (defect, report)
+        assert report["usable"] is False
+        types = {a["type"] for s in report["series"] for a in s["anomalies"]}
+        assert anomaly in types, (defect, types)
+
+
+def test_14_geometry_check_validation_and_state_guards(env_stack):
+    studies = _studies(env_stack)
+    bid = _submit_and_complete(env_stack, studies[0]["study_instance_uid"])
+
+    # 非正层距 -> 422
+    r = requests.post(
+        f"{env_stack['base']}/batches/{bid}/geometry-check",
+        params={"expected_spacing_mm": 0, "tolerance_mm": 0.5}, timeout=10)
+    assert r.status_code == 422
+
+    # 负容差 -> 422
+    r = requests.post(
+        f"{env_stack['base']}/batches/{bid}/geometry-check",
+        params={"expected_spacing_mm": 2.0, "tolerance_mm": -0.1}, timeout=10)
+    assert r.status_code == 422
+
+    # 缺少必填参数 -> 422
+    r = requests.post(
+        f"{env_stack['base']}/batches/{bid}/geometry-check",
+        params={"tolerance_mm": 0.5}, timeout=10)
+    assert r.status_code == 422
+
+    # 不存在的批 -> 404
+    r = requests.post(
+        f"{env_stack['base']}/batches/nope123/geometry-check",
+        params={"expected_spacing_mm": 2.0, "tolerance_mm": 0.5}, timeout=10)
+    assert r.status_code == 404
+
+    # 未完成批 -> 409：先制造一个 FAILED 批
+    r = requests.post(f"{env_stack['base']}/batches",
+                      json={"study_instance_uid": studies[2]["study_instance_uid"],
+                            "fault_inject": "save_failure"}, timeout=10)
+    failed_bid = r.json()["id"]
+    _wait_terminal(env_stack, failed_bid)
+    r = requests.post(
+        f"{env_stack['base']}/batches/{failed_bid}/geometry-check",
+        params={"expected_spacing_mm": 2.0, "tolerance_mm": 0.5}, timeout=10)
+    assert r.status_code == 409
+
+
+def test_15_geometry_check_scan_error_never_passes(env_stack):
+    """ZIP 在扫描前缺失：502 且 usable=false，不得用已读切片给合格结论。"""
+    studies = _studies(env_stack)
+    bid = _submit_and_complete(env_stack, studies[0]["study_instance_uid"])
+
+    zip_file = env_stack["api_data"] / "zips" / f"{bid}.zip"
+    assert zip_file.exists()
+    hidden = zip_file.with_suffix(".zip.hidden")
+    zip_file.rename(hidden)
+    try:
+        r = requests.post(
+            f"{env_stack['base']}/batches/{bid}/geometry-check",
+            params={"expected_spacing_mm": 2.0, "tolerance_mm": 0.5},
+            timeout=30,
+        )
+        assert r.status_code == 502
+        body = r.json()["detail"]
+        assert body["usable"] is False
+        assert body["scan_completed"] is False
+        assert body["verdict"] == "INDETERMINATE"
+        assert body["scan_error"]["code"] == "ZIP_MISSING"
+
+        events = requests.get(
+            f"{env_stack['base']}/batches/{bid}/events", timeout=5).json()
+        assert any(e["kind"] == "GEOMETRY_CHECK_SCAN_ERROR" for e in events)
+    finally:
+        hidden.rename(zip_file)
+
+    # ZIP 恢复后同批可正常检查并判可用（结论不被失败扫描污染）
+    r = requests.post(
+        f"{env_stack['base']}/batches/{bid}/geometry-check",
+        params={"expected_spacing_mm": 2.0, "tolerance_mm": 0.5}, timeout=30)
+    assert r.status_code == 200
+    assert r.json()["usable"] is True
+
+
+def test_16_geometry_check_corrupt_entry_never_passes(env_stack):
+    """ZIP 内条目损坏：502 + CORRUPT_ENTRY，禁止给合格结论。"""
+    import zipfile
+    studies = _studies(env_stack)
+    bid = _submit_and_complete(env_stack, studies[1]["study_instance_uid"])
+    zip_file = env_stack["api_data"] / "zips" / f"{bid}.zip"
+
+    # 重写 ZIP：保留 MANIFEST，把一个 dcm 换成垃圾字节
+    with zipfile.ZipFile(zip_file, "r") as zf:
+        entries = {n: zf.read(n) for n in zf.namelist()}
+    dcm_name = next(n for n in entries if n.startswith("dicom/"))
+    entries[dcm_name] = b"corrupted-bytes"
+    backup = zip_file.read_bytes()
+    with zipfile.ZipFile(zip_file, "w", zipfile.ZIP_DEFLATED) as zf:
+        for name, data in entries.items():
+            zf.writestr(name, data)
+    try:
+        r = requests.post(
+            f"{env_stack['base']}/batches/{bid}/geometry-check",
+            params={"expected_spacing_mm": 2.0, "tolerance_mm": 0.5},
+            timeout=30,
+        )
+        assert r.status_code == 502
+        body = r.json()["detail"]
+        assert body["usable"] is False
+        assert body["scan_error"]["code"] == "CORRUPT_ENTRY"
+        assert body["scan_error"]["entry"] == dcm_name
+    finally:
+        zip_file.write_bytes(backup)

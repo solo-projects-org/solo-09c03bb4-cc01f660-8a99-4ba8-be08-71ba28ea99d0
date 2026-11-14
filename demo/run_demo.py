@@ -197,6 +197,71 @@ def main() -> int:
             print(f"    重启后已完成批 A 下载 HTTP 状态={again.status_code}（期望 200）")
             assert again.status_code == 200
 
+    banner("8. 切片几何检查：缺层等缺陷不得判为可重建")
+    # 模拟 PACS 在 DEFECT_STUDIES=all 时提供 6 个缺陷检查；
+    # 缺层检查可通过内部 C-FIND 列表 + 几何检查结果识别
+    studies_all = requests.get(f"{API}/internal/pacs-studies",
+                               timeout=20).json()
+    print(f"    PACS 当前共 {len(studies_all)} 个检查（含几何缺陷演示检查）")
+
+    # 8.1 正常批：几何检查应判 USABLE
+    good_study = studies_all[0]["study_instance_uid"]
+    r = requests.post(f"{API}/batches",
+                      json={"study_instance_uid": good_study}, timeout=10)
+    r.raise_for_status()
+    good_bid = r.json()["id"]
+    good_view = wait_state(good_bid, {"COMPLETED", "FAILED"})
+    assert good_view["state"] == "COMPLETED"
+    rep = requests.post(
+        f"{API}/batches/{good_bid}/geometry-check",
+        params={"expected_spacing_mm": 2.0, "tolerance_mm": 0.5},
+        timeout=30,
+    ).json()
+    print(f"    正常检查几何判定：verdict={rep['verdict']} "
+          f"usable={rep['usable']} 序列状态="
+          f"{[s['status'] for s in rep['series']]}")
+    assert rep["verdict"] == "USABLE" and rep["usable"] is True
+
+    # 8.2 逐个检查其余检查，统计三类判定；缺陷检查必须无一被误判 USABLE
+    verdicts = {"USABLE": 0, "NOT_USABLE": 0, "INDETERMINATE": 0}
+    found_missing = False
+    for s in studies_all[1:]:
+        r = requests.post(f"{API}/batches",
+                          json={"study_instance_uid": s["study_instance_uid"]},
+                          timeout=10)
+        if r.status_code == 409:
+            continue  # 同 Study 已有终态/进行中批则跳过
+        r.raise_for_status()
+        bid = r.json()["id"]
+        view = wait_state(bid, {"COMPLETED", "FAILED"})
+        if view["state"] != "COMPLETED":
+            continue
+        report = requests.post(
+            f"{API}/batches/{bid}/geometry-check",
+            params={"expected_spacing_mm": 2.0, "tolerance_mm": 0.5},
+            timeout=30,
+        ).json()
+        verdicts[report["verdict"]] += 1
+        anomaly_types = {a["type"] for ser in report["series"]
+                         for a in ser["anomalies"]}
+        print(f"    Study={s['study_instance_uid'][-6:]} "
+              f"verdict={report['verdict']:<13} 异常={sorted(anomaly_types)}")
+        assert report["usable"] is False
+        if "MISSING_SLICE" in anomaly_types:
+            found_missing = True
+
+    print(f"    判定汇总：{verdicts}")
+    assert found_missing, "演示数据中应至少包含一个缺层检查"
+    assert verdicts["USABLE"] == 0, "缺陷检查不得被判为可重建"
+
+    # 8.3 扫描错误防护：下载完成批后删除其 ZIP 的场景由 API 容器内
+    # 数据卷操作触发，这里校验参数与状态守卫即可
+    bad_param = requests.post(
+        f"{API}/batches/{good_bid}/geometry-check",
+        params={"expected_spacing_mm": 0, "tolerance_mm": 0.5}, timeout=10)
+    print(f"    非正层距请求 HTTP 状态={bad_param.status_code}（期望 422）")
+    assert bad_param.status_code == 422
+
     banner("全部演示完成")
     return 0
 
