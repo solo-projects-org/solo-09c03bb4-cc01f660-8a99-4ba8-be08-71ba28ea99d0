@@ -8,6 +8,7 @@
 * 清单外实例 / 压缩实例：拒收、不入包
 * 保存失败：C-STORE 回失败码且批置 FAILED，迟到回传不可恢复
 * 重启恢复：未完成批失败，已完成批可下载（ZIP 可重建）
+* 切片几何检查：正常批 usable、缺层虚构检查报 missing_slices 判 unusable
 
 运行：python -m pytest tests/ -v
 """
@@ -72,10 +73,10 @@ def env_stack(tmp_path_factory):
             time.sleep(0.3)
         raise RuntimeError(f"端口 {port} 长时间被占用")
 
-    # 1) 生成虚构 CT
+    # 1) 生成虚构 CT（含一个标称 10 层、缺 2 层的检查，供几何检查演示）
     gen = subprocess.run(
         [sys.executable, "-m", "simulator.generate_data",
-         "--out", str(pacs_data), "--counts", "6,5,4"],
+         "--out", str(pacs_data), "--counts", "6,5,4", "--gap-study", "10"],
         cwd=ROOT, check=True, capture_output=True, text=True,
     )
     assert gen.returncode == 0
@@ -212,8 +213,10 @@ def test_01_health_and_pacs_listing(env_stack):
     r = requests.get(f"{env_stack['base']}/health", timeout=5)
     assert r.ok and r.json()["status"] == "ok"
     studies = _studies(env_stack)
-    assert len(studies) == 3
+    assert len(studies) == 4  # 3 个正常检查 + 1 个缺层检查
     assert all(s["modality"] == "CT" for s in studies)
+    gap = studies[3]
+    assert gap["instances"] == 8  # 标称 10 层缺 2 层
 
 
 def test_02_happy_path_completes_and_zip_matches_manifest(env_stack):
@@ -540,3 +543,84 @@ def test_09_restart_recovery(env_stack):
         assert dl.status_code == 200
     finally:
         pass
+
+
+def test_10_geometry_check_api(env_stack):
+    """切片几何检查 API：正常批 usable，缺层批报 missing_slices 判 unusable。"""
+    studies = _studies(env_stack)
+
+    # ---- 正常检查：层距均匀 2.0mm，应判 usable ----
+    ok_study = studies[0]["study_instance_uid"]
+    r = requests.post(f"{env_stack['base']}/batches",
+                      json={"study_instance_uid": ok_study}, timeout=10)
+    assert r.status_code == 201
+    bid_ok = r.json()["id"]
+    view = _wait_terminal(env_stack, bid_ok)
+    assert view["state"] == "COMPLETED", view
+
+    rep = requests.get(f"{env_stack['base']}/batches/{bid_ok}/geometry",
+                       params={"expected_spacing": 2.0, "tolerance": 0.5},
+                       timeout=30).json()
+    assert rep["conclusion"] == "usable" and rep["usable"], rep
+    assert rep["errors"] == []
+    assert rep["slice_count"] == studies[0]["instances"]
+    assert all(s["status"] == "ok" for s in rep["series"])
+    assert all(s["issues"] == [] for s in rep["series"])
+
+    # ---- 缺层检查：传输正常完成，几何检查应报告缺层并判 unusable ----
+    gap_study = studies[3]["study_instance_uid"]
+    r = requests.post(f"{env_stack['base']}/batches",
+                      json={"study_instance_uid": gap_study}, timeout=10)
+    assert r.status_code == 201
+    bid_gap = r.json()["id"]
+    view = _wait_terminal(env_stack, bid_gap)
+    assert view["state"] == "COMPLETED", view
+
+    rep = requests.get(f"{env_stack['base']}/batches/{bid_gap}/geometry",
+                       params={"expected_spacing": 2.0, "tolerance": 0.5},
+                       timeout=30).json()
+    assert rep["conclusion"] == "unusable" and not rep["usable"], rep
+    kinds = [i["kind"] for s in rep["series"] for i in s["issues"]]
+    assert kinds.count("missing_slices") == 2, rep  # 缺第 3、6 层各一处
+
+    # ---- 参数与状态校验 ----
+    # 非正层距 / 负容差 -> 422
+    r = requests.get(f"{env_stack['base']}/batches/{bid_ok}/geometry",
+                     params={"expected_spacing": 0, "tolerance": 0.5},
+                     timeout=5)
+    assert r.status_code == 422
+    r = requests.get(f"{env_stack['base']}/batches/{bid_ok}/geometry",
+                     params={"expected_spacing": 2.0, "tolerance": -0.1},
+                     timeout=5)
+    assert r.status_code == 422
+    # 缺参数 -> 422
+    r = requests.get(f"{env_stack['base']}/batches/{bid_ok}/geometry",
+                     timeout=5)
+    assert r.status_code == 422
+    # 批不存在 -> 404
+    r = requests.get(f"{env_stack['base']}/batches/nope/geometry",
+                     params={"expected_spacing": 2.0, "tolerance": 0.5},
+                     timeout=5)
+    assert r.status_code == 404
+
+    # 未完成批 -> 409：制造一个 MOVING 批
+    moving_study = studies[1]["study_instance_uid"]
+    r = requests.post(f"{env_stack['base']}/batches",
+                      json={"study_instance_uid": moving_study}, timeout=10)
+    assert r.status_code == 201
+    bid_moving = r.json()["id"]
+    deadline = time.time() + 30
+    view = {}
+    while time.time() < deadline:
+        view = requests.get(f"{env_stack['base']}/batches/{bid_moving}",
+                            timeout=5).json()
+        if view["state"] == "MOVING":
+            break
+        time.sleep(0.2)
+    assert view["state"] == "MOVING", view
+    r = requests.get(f"{env_stack['base']}/batches/{bid_moving}/geometry",
+                     params={"expected_spacing": 2.0, "tolerance": 0.5},
+                     timeout=5)
+    assert r.status_code == 409
+    view = _wait_terminal(env_stack, bid_moving)
+    assert view["state"] == "COMPLETED", view

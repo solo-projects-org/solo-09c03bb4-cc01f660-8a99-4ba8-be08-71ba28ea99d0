@@ -5,25 +5,32 @@
 核对收齐 → 打包 ZIP 下载** 的完整流水线，支持多检查并行、慢回传交错、
 重复投送去重、清单外实例拒收、保存失败判失败与重启恢复。
 
+交付离线分割前，还可对**已完成批做切片几何检查**：读取 ZIP 内非压缩 CT，
+按 SeriesInstanceUID 分组，用 ImageOrientationPatient 求法向、投影
+ImagePositionPatient 得到层位，逐序列报告重层/缺层/层距异常/方向不一致/
+几何标签缺失，判定哪些序列能可靠重建体数据。
+
 * **API 框架**：FastAPI（自带 Swagger/OpenAPI）
 * **DICOM 栈**：pynetdicom 3.x（C-STORE SCP + C-FIND/C-MOVE SCU）、pydicom
 * **持久化**：SQLite（WAL，全量落在数据卷）
 * **模拟 PACS**：pynetdicom 实现的真实 DICOM 网络对端，内置虚构合成 CT，
-  可配置慢回传与重复投送；另带 rogue 投送器演示拒收
+  可配置慢回传与重复投送；另带 rogue 投送器演示拒收；可生成**缺层**的
+  虚构 CT 供几何检查演示
 
 ---
 
 ## 1. 快速开始（Docker Compose）
 
 ```bash
-# 构建并启动 API + 模拟 PACS（首次会自动生成 8/6/5 个实例的三个虚构 CT 检查）
+# 构建并启动 API + 模拟 PACS（首次会自动生成 8/6/5 个实例的三个虚构 CT 检查，
+# 以及一个标称 10 层缺 2 层的缺层检查）
 docker compose up --build -d
 
 # Swagger 文档
 open http://localhost:8000/docs
 
 # 一键端到端演示：交错回传 / 重复投送 / 清单外拒收 / 压缩拒收 /
-# 保存失败 / 失败批迟到拒收 / 重启恢复
+# 保存失败 / 失败批迟到拒收 / 切片几何检查 / 重启恢复
 docker compose run --rm demo
 ```
 
@@ -54,6 +61,7 @@ docker compose run --rm demo
 | **迟到回传不能恢复失败批** | 终态 FAILED 的批收到 C-STORE 一律拒收；DB 层 `transition_state` 禁止任何状态迁出终态 |
 | 多检查**并行、慢回传互不阻塞** | 每批独立线程；C-STORE SCP 每关联一线程；C-MOVE 回传与其它批的 API/DICOM 处理无共享阻塞 |
 | **重启恢复** | 启动时所有非终态批置 FAILED；COMPLETED 批保留可下载，ZIP 丢失自动按登记重建 |
+| **切片几何检查** | `app/geometry.py`：仅 COMPLETED 批可查；按 SeriesInstanceUID 分组，IOP 叉积求法向、IPP 投影得层位；逐序列报告重层/缺层/层距异常/方向不一致/标签缺失；每序列 ≥2 片且无异常整批才 `usable`；标签缺失或不足两片为 `undetermined` 不得报合格；ZIP 缺失/损坏/条目不可读/与登记清单不符（被替换）同样只判 `undetermined` |
 
 ### 批状态机
 
@@ -79,6 +87,7 @@ Swagger：`GET /docs`（OpenAPI JSON：`/openapi.json`）
 | GET | `/batches/{id}/events` | 事件流水（接收、重复、拒收、状态迁移、故障）|
 | GET | `/batches/{id}/instances` | 清单、已收、缺失 SOP 列表 |
 | GET | `/batches/{id}/download` | 下载 ZIP（仅 COMPLETED），ZIP 内含 `dicom/` 与 `MANIFEST.csv` |
+| GET | `/batches/{id}/geometry?expected_spacing=&tolerance=` | 已完成批的切片几何检查（重层/缺层/层距/方向/标签），返回逐序列报告与整批结论 |
 | GET | `/health` | 健康检查 |
 | GET | `/internal/pacs-studies` | （演示）C-FIND 列出模拟 PACS 检查 |
 | POST | `/internal/suicide` | （演示）退出进程，由 compose 自动重启以演示恢复 |
@@ -96,10 +105,32 @@ watch "curl -s $BASE/batches/$BID | jq"
 curl -s $BASE/batches/$BID/events | jq
 curl -OJ $BASE/batches/$BID/download
 
+# 切片几何检查（期望层距 2.0mm，容差 0.5mm）
+curl -s "$BASE/batches/$BID/geometry?expected_spacing=2.0&tolerance=0.5" | jq
+
 # 保存失败演示
 curl -s -X POST $BASE/batches -H 'Content-Type: application/json' \
   -d "{\"study_instance_uid\":\"$STUDY\",\"fault_inject\":\"save_failure\"}"
 ```
+
+几何检查响应要点：
+
+```json
+{
+  "conclusion": "usable | unusable | undetermined",
+  "usable": true,
+  "errors": [],
+  "series": [
+    {"series_instance_uid": "...", "slice_count": 8, "status": "ok",
+     "issues": [], "normal": [0, 0, 1], "spacings": [2.0, 2.0]}
+  ]
+}
+```
+
+* `conclusion=usable`：每个序列 ≥2 片且均无异常，整批可交付离线分割；
+* `unusable`：至少一个序列存在重层/缺层/层距异常/方向不一致；
+* `undetermined`：标签缺失、不足两片，或 ZIP 缺失/损坏/被替换——
+  **无法判定，不得视为合格**。
 
 ---
 
@@ -110,6 +141,8 @@ curl -s -X POST $BASE/batches -H 'Content-Type: application/json' \
 * `MOVE_DELAY=1.0`：每个实例发送前停顿 1 秒，制造慢回传，便于观察多批交错
 * `MOVE_DUPLICATE_EVERY=3`：每 3 个实例额外用一条新关联重发一次，模拟源端重试
   （接收端应回 SUCCESS 但不计数）
+* `GAP_STUDY_INSTANCES=10`：额外生成一个标称 10 层、缺 2 层的虚构 CT 检查
+  （传输与打包完全正常，只有切片几何检查能发现缺层），供几何检查 API 演示
 
 rogue 投送器（演示容器/API 镜像内均可运行）：
 
@@ -136,17 +169,20 @@ app/
   storage.py     非压缩 CT 校验、原子写盘+fsync、故障注入、ZIP 打包
   dicom.py       C-STORE SCP 处理器、C-FIND/C-MOVE SCU
   pipeline.py    每批后台线程编排与启动恢复
+  geometry.py    切片几何检查（法向/投影/重层/缺层/层距/方向/标签）
   main.py        FastAPI 路由、lifespan、Swagger
 simulator/
-  generate_data.py  虚构合成 CT 生成器（确定性模体像素，无真实患者信息）
+  generate_data.py  虚构合成 CT 生成器（确定性模体像素，无真实患者信息；
+                    可生成缺层检查）
   pacs.py           模拟 PACS（C-ECHO/C-FIND/C-MOVE，慢回传+重复投送）
   rogue_sender.py   清单外/压缩实例投送器
 demo/
-  run_demo.py       端到端演示编排
+  run_demo.py       端到端演示编排（含切片几何检查演示）
 tests/
   test_db.py       状态机/去重/终态保护单元测试
   test_storage.py  校验/原子写/ZIP 单元测试
-  test_e2e.py      真实 pynetdicom 网络栈端到端测试（8 个场景）
+  test_geometry.py 切片几何检查单元测试（15 个场景）
+  test_e2e.py      真实 pynetdicom 网络栈端到端测试（10 个场景）
 docker-compose.yml  Dockerfile  Dockerfile.pacs  entrypoint.sh
 ```
 
@@ -159,7 +195,7 @@ python -m pytest tests/ -v
 
 端到端测试会在临时目录启动完整的 PACS + API 真实进程对，覆盖：
 正常收齐打包、并行交错、重复去重、清单外/压缩/未知 Study 拒收、
-保存失败与迟到拒收、409 冲突、重启恢复（共 19 个测试）。
+保存失败与迟到拒收、409 冲突、重启恢复、切片几何检查（共 36 个测试）。
 
 ## 7. 接入真实 PACS 的注意事项
 

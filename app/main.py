@@ -7,11 +7,11 @@ import uuid
 from contextlib import asynccontextmanager
 from pathlib import Path
 
-from fastapi import BackgroundTasks, FastAPI, HTTPException
+from fastapi import BackgroundTasks, FastAPI, HTTPException, Query
 from fastapi.responses import FileResponse
 from pydantic import BaseModel, Field
 
-from . import dicom, storage
+from . import dicom, geometry, storage
 from .config import settings
 from .db import (
     STATE_COMPLETED,
@@ -106,6 +106,50 @@ def _view(row: dict) -> BatchView:
     )
 
 
+class GeometryIssue(BaseModel):
+    kind: str = Field(
+        description="问题类型：duplicate_slices 重层 / missing_slices 缺层 / "
+                    "irregular_spacing 层距异常 / inconsistent_orientation 方向不一致 / "
+                    "missing_geometry_tags 几何标签缺失",
+    )
+    detail: str
+    sop_instance_uids: list[str] = []
+    positions: list[float] = []
+
+
+class SeriesGeometryReport(BaseModel):
+    series_instance_uid: str
+    slice_count: int
+    status: str = Field(description="ok 正常 / anomalous 有异常 / undetermined 无法判定")
+    reason: str = Field(description="status=undetermined 时的原因说明")
+    issues: list[GeometryIssue] = []
+    normal: list[float] | None = Field(
+        default=None, description="序列参考法向（由 ImageOrientationPatient 叉积得到）"
+    )
+    spacings: list[float] | None = Field(
+        default=None, description="按层位排序后的相邻层距（mm）"
+    )
+
+
+class GeometryReport(BaseModel):
+    batch_id: str
+    expected_spacing: float
+    tolerance: float
+    conclusion: str = Field(
+        description="usable 全部序列可重建 / unusable 存在异常序列 / "
+                    "undetermined 无法判定（标签缺失、不足两片或 ZIP 不可信），"
+                    "undetermined 不得视为合格"
+    )
+    usable: bool = Field(description="仅 conclusion=usable 时为 true")
+    errors: list[str] = Field(
+        description="ZIP 缺失/损坏/条目不可读/与登记清单不符等错误；"
+                    "非空时结论必为 undetermined"
+    )
+    series_count: int
+    slice_count: int
+    series: list[SeriesGeometryReport]
+
+
 # ------------------------------------------------------------------ routes
 @app.post("/batches", response_model=BatchView, status_code=201,
           tags=["batches"], summary="提交检查，启动取数批")
@@ -182,6 +226,46 @@ def download_zip(batch_id: str) -> FileResponse:
     return FileResponse(
         path, media_type="application/zip",
         filename=f"{batch_id}.zip",
+    )
+
+
+@app.get("/batches/{batch_id}/geometry",
+         response_model=GeometryReport,
+         tags=["geometry"],
+         summary="已完成批的切片几何检查（重层/缺层/层距/方向/标签）")
+def check_geometry(
+    batch_id: str,
+    expected_spacing: float = Query(
+        ..., gt=0, description="期望层距（mm）",
+        examples=[2.0],
+    ),
+    tolerance: float = Query(
+        ..., ge=0, description="层距容差（mm），应小于期望层距",
+        examples=[0.5],
+    ),
+) -> GeometryReport:
+    """读取已完成批 ZIP 内的非压缩 CT，按 SeriesInstanceUID 分组做切片几何
+    检查。每个序列至少两片且均无异常时整批才判 ``usable``；标签缺失或不足
+    两片为 ``undetermined``（无法判定，不得报合格）；ZIP 缺失/被替换/条目
+    损坏时同样不得给出合格结论。"""
+    row = db.get_batch(batch_id)
+    if row is None:
+        raise HTTPException(404, "批不存在")
+    if row["state"] != STATE_COMPLETED:
+        raise HTTPException(
+            409,
+            f"批状态 {row['state']}，仅 COMPLETED 批可做切片几何检查",
+        )
+    expected_sops = {sop for sop, _ in db.received_files(batch_id)}
+    zip_path = Path(row["zip_path"]) if row["zip_path"] else None
+    result = geometry.inspect_zip_geometry(
+        zip_path, expected_spacing, tolerance, expected_sops
+    )
+    return GeometryReport(
+        batch_id=batch_id,
+        expected_spacing=expected_spacing,
+        tolerance=tolerance,
+        **result,
     )
 
 

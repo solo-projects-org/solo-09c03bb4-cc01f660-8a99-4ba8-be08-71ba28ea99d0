@@ -7,7 +7,8 @@
 3. 回传进行中投送“清单外实例”和“压缩实例”，验证均被拒收、不入包
 4. 提交一个 save_failure 批，验证保存失败即批失败、C-STORE 回失败码
 5. 轮询进度，下载完成批 ZIP 并校验实例数与清单一致
-6. 重启恢复演示：制造一个未完成批后调用进程退出，验证重启后该批判失败、
+6. 切片几何检查：正常批判 usable；缺层虚构检查报告缺层并判 unusable
+7. 重启恢复演示：制造一个未完成批后调用进程退出，验证重启后该批判失败、
    已完成批仍可下载
 
 运行::
@@ -152,6 +153,49 @@ def main() -> int:
     denied = requests.get(f"{API}/batches/{batch_c}/download", timeout=10)
     print(f"    失败批 C 下载 HTTP 状态={denied.status_code}（期望 409）")
     assert denied.status_code == 409
+
+    banner("6.5 切片几何检查（离线分割前的体数据可重建性确认）")
+    # 正常批 A：每序列层距均匀，应判 usable
+    r = requests.get(f"{API}/batches/{batch_a}/geometry",
+                     params={"expected_spacing": 2.0, "tolerance": 0.5},
+                     timeout=30)
+    r.raise_for_status()
+    report_a = r.json()
+    print(f"    批 A 结论={report_a['conclusion']} usable={report_a['usable']} "
+          f"序列数={report_a['series_count']} 切片数={report_a['slice_count']}")
+    for s in report_a["series"]:
+        print(f"      序列 {s['series_instance_uid']}：{s['status']}，"
+              f"{s['slice_count']} 片，层距={s['spacings']}")
+    assert report_a["conclusion"] == "usable" and report_a["usable"], report_a
+
+    # 缺层检查（第 4 个检查，由 PACS 的 GAP_STUDY_INSTANCES 生成）
+    if len(studies) >= 4:
+        gap_study = studies[3]["study_instance_uid"]
+        r = requests.post(f"{API}/batches",
+                          json={"study_instance_uid": gap_study}, timeout=10)
+        r.raise_for_status()
+        batch_g = r.json()["id"]
+        print(f"    缺层演示批 G={batch_g}  Study={gap_study}")
+        view_g = wait_state(batch_g, {"COMPLETED", "FAILED"})
+        assert view_g["state"] == "COMPLETED", view_g
+        r = requests.get(f"{API}/batches/{batch_g}/geometry",
+                         params={"expected_spacing": 2.0, "tolerance": 0.5},
+                         timeout=30)
+        r.raise_for_status()
+        report_g = r.json()
+        print(f"    批 G 结论={report_g['conclusion']} usable={report_g['usable']}")
+        for s in report_g["series"]:
+            print(f"      序列 {s['series_instance_uid']}：{s['status']}，"
+                  f"{s['slice_count']} 片")
+            for issue in s["issues"]:
+                print(f"        [{issue['kind']}] {issue['detail']}")
+        assert report_g["conclusion"] == "unusable", report_g
+        assert not report_g["usable"]
+        assert any(i["kind"] == "missing_slices"
+                   for s in report_g["series"] for i in s["issues"]), report_g
+        print("    缺层被正确报告，整批判为 unusable，不可交付离线分割")
+    else:
+        print("    PACS 未生成缺层检查（GAP_STUDY_INSTANCES=0），跳过缺层演示")
 
     if args.skip_restart:
         banner("演示完成（已跳过重启恢复）")

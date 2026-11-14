@@ -24,6 +24,9 @@ PATIENT_NAMES = {
     2: "PHANTOM^Bravo",
     3: "PHANTOM^Charlie",
 }
+# 缺层演示检查使用的虚构患者名与检查序号段
+GAP_PATIENT_NAME = "PHANTOM^Gap"
+GAP_STUDY_INDEX = 90
 
 
 def _make_uid(serial: int) -> str:
@@ -145,12 +148,71 @@ def generate_study(
     }
 
 
+def generate_gap_study(
+    out_dir: Path,
+    instance_count: int,
+    gap_instances: set[int] | None = None,
+) -> dict:
+    """生成一个缺层的虚构 CT 检查，供切片几何检查 API 演示缺层报告。
+
+    层位按 2.0mm 层距的绝对坐标连续编号，但 ``gap_instances`` 中的层号
+    不生成实例，缺失处形成 4.0mm 的层距空洞。传输与打包流程完全正常，
+    只有几何检查能发现缺层。
+    """
+    if instance_count < 6:
+        raise ValueError("缺层检查至少需要 6 层才有演示意义")
+    if gap_instances is None:
+        gap_instances = {max(2, instance_count // 3),
+                         max(3, (2 * instance_count) // 3)}
+    gap_instances = {i for i in gap_instances if 1 < i < instance_count}
+    if not gap_instances:
+        raise ValueError("缺层层号必须落在 (1, instance_count) 区间内")
+
+    study_index = GAP_STUDY_INDEX
+    patient_id = f"P{study_index:03d}"
+    study_uid = _make_uid(1000 + study_index)
+    series_uid = _make_uid(2000 + study_index)
+    study_dir = out_dir / study_uid
+    study_dir.mkdir(parents=True, exist_ok=True)
+
+    kept = [i for i in range(1, instance_count + 1) if i not in gap_instances]
+    for i in kept:
+        sop_uid = _make_uid(3000 + study_index * 100 + i)
+        ds = build_ct_dataset(
+            study_uid=study_uid,
+            series_uid=series_uid,
+            sop_uid=sop_uid,
+            patient_id=patient_id,
+            patient_name=GAP_PATIENT_NAME,
+            instance_number=i,
+            instance_count=instance_count,
+        )
+        ds.SeriesDescription = "Synthetic axial CT (missing slices demo)"
+        ds.save_as(str(study_dir / f"{i:04d}.dcm"), enforce_file_format=True)
+
+    return {
+        "study_instance_uid": study_uid,
+        "series_instance_uid": series_uid,
+        "patient_id": patient_id,
+        "patient_name": GAP_PATIENT_NAME,
+        "instances": len(kept),
+        "nominal_instances": instance_count,
+        "missing_instance_numbers": sorted(gap_instances),
+        "directory": str(study_dir),
+    }
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="生成虚构合成 CT 数据")
     parser.add_argument("--out", required=True, help="输出目录")
     parser.add_argument(
         "--counts", default="8,6,5",
         help="三个检查各自的实例数，逗号分隔（默认 8,6,5）",
+    )
+    parser.add_argument(
+        "--gap-study", type=int, default=0, metavar="N",
+        help="额外生成一个标称 N 层（缺 2 层）的虚构 CT 检查，"
+             "供切片几何检查演示；0 表示不生成（默认）",
     )
     args = parser.parse_args()
 
@@ -162,6 +224,14 @@ def main() -> None:
         manifest.append(meta)
         print(f"generated study {meta['study_instance_uid']} "
               f"({count} instances) -> {meta['directory']}")
+
+    if args.gap_study > 0:
+        meta = generate_gap_study(out_dir, args.gap_study)
+        manifest.append(meta)
+        print(f"generated gap study {meta['study_instance_uid']} "
+              f"({meta['instances']}/{meta['nominal_instances']} instances, "
+              f"missing layers {meta['missing_instance_numbers']}) "
+              f"-> {meta['directory']}")
 
     import json
     manifest_path = out_dir / "studies.json"

@@ -52,6 +52,8 @@ services:
       # 每 3 个实例重复投送一次，验证接收端去重
       MOVE_DUPLICATE_EVERY: "3"
       STUDY_COUNTS: "8,6,5"
+      # 额外生成一个标称 10 层（缺 2 层）的虚构 CT，供切片几何检查演示
+      GAP_STUDY_INSTANCES: "10"
     ports:
       - "11112:11112"
     volumes:
